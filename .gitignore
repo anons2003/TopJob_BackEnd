@@ -7,3 +7,4 @@ node_modules/
 # Ignore MacOS system files
 .DS_Store
 
+.application.properties
