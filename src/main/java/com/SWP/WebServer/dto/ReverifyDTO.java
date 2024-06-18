@@ -1,20 +1,13 @@
 package com.SWP.WebServer.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class ReverifyDTO {
     private String email;
 
-    public ReverifyDTO() {
-    }
-
-    public ReverifyDTO(String mail) {
-        this.email = email;
-    }
-
-    public String getemail() {
-        return email;
-    }
-
-    public void setemail(String email) {
-        this.email = email;
-    }
 }
