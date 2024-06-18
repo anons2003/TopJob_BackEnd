@@ -6,8 +6,9 @@ public class LoginSocialDTO {
     private String name;
     private String picture;
     private String sid;
+
     private String email;
-//    private String token;
+
 
     public LoginSocialDTO(String name, String picture, String sid, String email) {
         this.name = name;
@@ -15,14 +16,6 @@ public class LoginSocialDTO {
         this.sid = sid;
         this.email = email;
     }
-
-//    public String getToken() {
-//        return token;
-//    }
-//
-//    public void setToken(String token) {
-//        this.token = token;
-//    }
 
     public String getName() {
         return name;
