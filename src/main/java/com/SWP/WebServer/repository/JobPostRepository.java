@@ -1,11 +1,10 @@
+// JobRepository.java
 package com.SWP.WebServer.repository;
 
-import com.SWP.WebServer.entity.Enterprise;
-
+import com.SWP.WebServer.entity.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EnterpriseRepository extends JpaRepository<Enterprise, Integer> {
-    Enterprise findByEid(int e_id);
+public interface JobPostRepository extends JpaRepository<Job, Long> {
 }

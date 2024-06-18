@@ -1,9 +1,12 @@
 package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.*;
+import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
+import com.SWP.WebServer.service.CVService;
+import com.SWP.WebServer.service.CVServiceImpl;
 import com.SWP.WebServer.service.CloudinaryService;
 import com.SWP.WebServer.service.UserService;
 import com.SWP.WebServer.token.JwtTokenProvider;
@@ -11,17 +14,17 @@ import com.SWP.WebServer.token.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.coyote.Response;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
-
 @RestController
+
 public class UserController {
     @Autowired
     UserService userService;
@@ -29,20 +32,21 @@ public class UserController {
     JwtTokenProvider jwtTokenProvider;
     @Autowired
     CloudinaryService cloudinaryService;
-
+    @Autowired
+    CVService cvService;
 
     @PostMapping("/signup")
     public User create(@RequestBody SignupDTO body) {
         return userService.signup(body);
     }
 
-    @PostMapping("/social")
-    public LoginResponse loginSocial(@RequestBody LoginSocialDTO body) {
-        User user = userService.saveSocialUser(body);
-        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
-        LoginResponse response = new LoginResponse(token, user.getRole());
-        return response;
-    }
+//    @PostMapping("/social")
+//    public LoginResponse loginSocial(@RequestBody LoginSocialDTO body) {
+//        User user = userService.saveSocialUser(body);
+//        String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
+//        LoginResponse response = new LoginResponse(token, user.getRole());
+//        return response;
+//    }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO body) {
@@ -52,7 +56,9 @@ public class UserController {
     }
 
     @GetMapping("/verify")
-    public void verifyEmail(@RequestParam(name = "token") String query, HttpServletResponse response) {
+    public void verifyEmail(
+            @RequestParam(name = "token") String query,
+            HttpServletResponse response) {
         userService.updateVerifyEmail(query);
         try {
             response.sendRedirect("http://localhost:3000/login");
@@ -63,21 +69,27 @@ public class UserController {
 
     @PostMapping("/reverify")
     public ResponseEntity<?> reverify(@RequestBody ReverifyDTO body) {
-        userService.reverify(body.getemail());
+        userService.reverify(body.getEmail());
         return ResponseEntity.ok("Reverification email sent successfully.");
 
     }
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginDTO body) {
-            User user = userService.login(body);
-            String token = jwtTokenProvider.generateAccessToken(user.getId() + "");
-            LoginResponse response = new LoginResponse(token, user.getRole());
-            return response;
+        User user = userService.login(body);
+        String token = jwtTokenProvider.generateAccessToken(user.getUid() + "");
+        LoginResponse response = new LoginResponse(token, user.getRoleType().getRoleTypeName());
+        return response;
     }
 
-
-
+    @PostMapping("/apply-cv/{eid}")
+    public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
+            @RequestHeader("Authorization") String token,
+            @PathVariable("eid") int eid){
+        String userId  = getUserIdFromToken(token);
+        CVApply cvApply = cvService.applyCV(body, userId,eid);
+        return ResponseEntity.ok(cvApply);
+    }
 
     @PatchMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO body) {
@@ -98,6 +110,14 @@ public class UserController {
         User user = userService.getUserProfile(userId);
         return user;
     }
+
+    //
+    // @PatchMapping("/password")
+    // public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO body)
+    // {
+    // userService.changePassword(body);
+    // return ResponseEntity.ok("Reset password successfully.");
+    // }
 
     @PatchMapping("/update-password")
     public ResponseEntity<?> updatePassword(
@@ -125,27 +145,27 @@ public class UserController {
         return userService.updateProfile(body, userId);
     }
 
-    @PatchMapping("/update-info")
-    public ResponseEntity<?> updateUserInfo(
-            @RequestBody UpdateInfoDTO updateInfoDTO,
-            @RequestParam(value = "resume", required = false) MultipartFile resume,
-            @RequestHeader("Authorization") String token) {
-        String userId = getUserIdFromToken(token);
-
-        // if (resume != null && !resume.isEmpty()) {
-        // try {
-        // Map<String, String> data = cloudinaryService.upload(resume);
-        // String resumeUrl = data.get("url");
-        // updateInfoDTO.setResume_url(resumeUrl);
-        // } catch (Exception e) {
-        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        // .body("Failed to upload resume: " + e.getMessage());
-        // }
-        // }
-
-        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
-        return ResponseEntity.ok(updatedUser);
-    }
+//    @PatchMapping("/update-info")
+//    public ResponseEntity<?> updateUserInfo(
+//            @RequestBody UpdateInfoDTO updateInfoDTO,
+//            @RequestParam(value = "resume", required = false) MultipartFile resume,
+//            @RequestHeader("Authorization") String token) throws IOException {
+//        String userId = getUserIdFromToken(token);
+//
+//        // if (resume != null && !resume.isEmpty()) {
+//        // try {
+//        // Map<String, String> data = cloudinaryService.upload(resume);
+//        // String resumeUrl = data.get("url");
+//        // updateInfoDTO.setResume_url(resumeUrl);
+//        // } catch (Exception e) {
+//        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//        // .body("Failed to upload resume: " + e.getMessage());
+//        // }
+//        // }
+//
+//        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
+//        return ResponseEntity.ok(updatedUser);
+//    }
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(
@@ -182,7 +202,5 @@ public class UserController {
         } catch (ExpiredJwtException e) {
             throw new ApiRequestException("expired_session", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
 }
