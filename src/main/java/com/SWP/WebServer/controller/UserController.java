@@ -2,13 +2,11 @@ package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.*;
 import com.SWP.WebServer.entity.CVApply;
+import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.response.LoginResponse;
-import com.SWP.WebServer.service.CVService;
-import com.SWP.WebServer.service.CVServiceImpl;
-import com.SWP.WebServer.service.CloudinaryService;
-import com.SWP.WebServer.service.UserService;
+import com.SWP.WebServer.service.*;
 import com.SWP.WebServer.token.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +26,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    JobSeekerService jobSeekerService;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
     @Autowired
@@ -133,7 +133,7 @@ public class UserController {
             @RequestBody ContactInfoDto body,
             @RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
-        userService.updateContactInfo(body, userId);
+        jobSeekerService.updateContactInfo(body, userId);
         return ResponseEntity.ok("Update contact successfully");
     }
 
@@ -145,27 +145,27 @@ public class UserController {
         return userService.updateProfile(body, userId);
     }
 
-//    @PatchMapping("/update-info")
-//    public ResponseEntity<?> updateUserInfo(
-//            @RequestBody UpdateInfoDTO updateInfoDTO,
-//            @RequestParam(value = "resume", required = false) MultipartFile resume,
-//            @RequestHeader("Authorization") String token) throws IOException {
-//        String userId = getUserIdFromToken(token);
-//
-//        // if (resume != null && !resume.isEmpty()) {
-//        // try {
-//        // Map<String, String> data = cloudinaryService.upload(resume);
-//        // String resumeUrl = data.get("url");
-//        // updateInfoDTO.setResume_url(resumeUrl);
-//        // } catch (Exception e) {
-//        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//        // .body("Failed to upload resume: " + e.getMessage());
-//        // }
-//        // }
-//
-//        User updatedUser = userService.updateInfo(updateInfoDTO, userId);
-//        return ResponseEntity.ok(updatedUser);
-//    }
+    @PatchMapping("/update-info")
+    public ResponseEntity<?> updateUserInfo(
+            @RequestBody UpdateInfoDTO updateInfoDTO,
+            @RequestParam(value = "resume", required = false) MultipartFile resume,
+            @RequestHeader("Authorization") String token) throws IOException {
+        String userId = getUserIdFromToken(token);
+
+        // if (resume != null && !resume.isEmpty()) {
+        // try {
+        // Map<String, String> data = cloudinaryService.upload(resume);
+        // String resumeUrl = data.get("url");
+        // updateInfoDTO.setResume_url(resumeUrl);
+        // } catch (Exception e) {
+        // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        // .body("Failed to upload resume: " + e.getMessage());
+        // }
+        // }
+
+        JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
+        return ResponseEntity.ok(updatedUser);
+    }
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(
@@ -174,7 +174,7 @@ public class UserController {
         String userId = getUserIdFromToken(token);
         Map<String, String> data = cloudinaryService.upload(file);
         String url = data.get("url");
-        userService.updateAvatar(url, userId);
+        jobSeekerService.updateAvatar(url, userId);
         return ResponseEntity.ok("Update avatar successfully");
     }
 
@@ -185,7 +185,7 @@ public class UserController {
         String userId = getUserIdFromToken(token);
         Map<String, String> data = cloudinaryService.upload(resume);
         String url = data.get("url");
-        userService.updateResume(url, userId);
+        jobSeekerService.updateResume(url, userId);
         return ResponseEntity.ok("Update resume successfully");
     }
 
