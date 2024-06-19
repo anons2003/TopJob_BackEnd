@@ -45,13 +45,12 @@ public class User {
     private RoleType roleType;
 
 
-
     public User(
             String user_name,
             String email,
             String password,
             String avatar_url,
-            String gId,
+            String gid,
             int is_verify_email) {
         this.user_name = user_name;
         this.email = email;
@@ -61,13 +60,13 @@ public class User {
         this.is_verify_email = is_verify_email;
         this.created_at = new Date();
         this.updated_at = new Date();
-        this.isActive=0;
+        this.isActive = 1;
         this.phone = null;
         this.city = null;
         this.state = null;
-        this.account_balance=0;
+        this.account_balance = 0;
         this.web_url = "";
-        this.resume_url="";
+        this.resume_url = "";
     }
 
 }

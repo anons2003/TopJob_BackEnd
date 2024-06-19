@@ -19,10 +19,10 @@ public class Job {
     private String description;
 
     @Column(name = "job_type")
-    private String jobType;
+    private int jobType;
 
     @Column(name = "job_category")
-    private String jobCategory;
+    private int jobCategory;
 
     @Column(name = "salary_type")
     private String salaryType;
@@ -47,6 +47,15 @@ public class Job {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "posted_eid",
+            referencedColumnName = "eid"
+    )
+    private Enterprise posted_uid;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -59,6 +68,14 @@ public class Job {
     }
 
     // Getters and setters
+
+    public Enterprise getPosted_uid() {
+        return posted_uid;
+    }
+
+    public void setPosted_uid(Enterprise posted_uid) {
+        this.posted_uid = posted_uid;
+    }
 
     public Long getId() {
         return id;
@@ -84,19 +101,19 @@ public class Job {
         this.description = description;
     }
 
-    public String getJobType() {
+    public int getJobType() {
         return jobType;
     }
 
-    public void setJobType(String jobType) {
+    public void setJobType(int jobType) {
         this.jobType = jobType;
     }
 
-    public String getJobCategory() {
+    public int getJobCategory() {
         return jobCategory;
     }
 
-    public void setJobCategory(String jobCategory) {
+    public void setJobCategory(int jobCategory) {
         this.jobCategory = jobCategory;
     }
 

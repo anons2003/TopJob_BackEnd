@@ -31,6 +31,7 @@ public class JobSeeker {
             referencedColumnName = "uid"
     )
     private User user;
+
     //
     public JobSeeker(User user) {
         this.user = user;

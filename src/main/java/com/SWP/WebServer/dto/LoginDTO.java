@@ -1,15 +1,15 @@
 package com.SWP.WebServer.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class LoginDTO {
 
-        private String email;
-        private String password;
+    private String email;
+    private String password;
 
 }

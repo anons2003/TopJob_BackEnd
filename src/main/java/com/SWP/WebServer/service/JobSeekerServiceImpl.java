@@ -2,7 +2,6 @@ package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.dto.UpdateInfoDTO;
 import com.SWP.WebServer.entity.JobSeeker;
-import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.JobSeekerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class JobSeekerServiceImpl implements JobSeekerService{
+public class JobSeekerServiceImpl implements JobSeekerService {
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
-    
+
     public JobSeeker updateInfo(UpdateInfoDTO body, String userId) throws IOException {
         int id = Integer.parseInt(userId);
         JobSeeker user = jobSeekerRepository.findByJid(id);
@@ -68,6 +67,11 @@ public class JobSeekerServiceImpl implements JobSeekerService{
         oembedMatcher.appendTail(result);
 
         return result.toString();
+    }
+
+    public JobSeeker getJobSeekerProfile(String jid) {
+        JobSeeker JobSeeker = jobSeekerRepository.findByJid(Integer.parseInt(jid));
+        return JobSeeker;
     }
 
 }

@@ -58,9 +58,9 @@ public class UserService {
 
     public User addNew(User user) {
         user.setCreated_at(new Date(System.currentTimeMillis()));
-        int userTypeId = user.getRoleType().getRoleTypeId();
+        int roleType = user.getRoleType().getRoleTypeId();
 
-        if (userTypeId == 1) {
+        if (roleType == 1) {
             jobSeekerRepository.save(new JobSeeker(user));
         } else {
             enterpriseRepository.save(new Enterprise(user));
@@ -69,7 +69,6 @@ public class UserService {
         return user;
     }
 
-    //--Ham signup--//
     public User signup(SignupDTO user) {
         String user_name = user.getUser_name();
         String email = user.getEmail().toLowerCase();
@@ -89,7 +88,7 @@ public class UserService {
         User newUser = userRepository.save(
                 new User(
                         user_name, email, password,
-                        "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg",
+                        "https://res.cloudinary.com/dz9kynjwb/image/upload/v1717770585/OIP_bsmlku.jpg",
                         null, 0
                 ));
         RoleType roleType = roleTypeRepository.findByRoleTypeId(roleTypeId)
