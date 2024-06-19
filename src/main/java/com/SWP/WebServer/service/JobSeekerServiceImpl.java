@@ -1,5 +1,6 @@
 package com.SWP.WebServer.service;
 
+import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
@@ -12,20 +13,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class JobSeekerServiceImpl implements JobSeekerService {
+public class JobSeekerServiceImpl implements JobSeekerService{
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
-
-    public JobSeeker updateInfo(UpdateInfoDTO body, String userId) throws IOException {
+    
+    public JobSeeker updateInfo(UpdateInfoDTO body, String userId)  {
         int id = Integer.parseInt(userId);
-        JobSeeker user = jobSeekerRepository.findByJid(id);
+        JobSeeker user = jobSeekerRepository.findByUser_Uid(id);
         if (user == null) {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         // Update user fields
-        if (body.getCity() != null) user.getUser().setCity(body.getCity());
-        if (body.getState() != null) user.getUser().setState(body.getState());
+        if (body.getCity() != null) user.setCity(body.getCity());
+        if (body.getState() != null) user.setState(body.getState());
         if (body.getFirst_name() != null) user.setFirst_name(body.getFirst_name());
         if (body.getLast_name() != null) user.setLast_name(body.getLast_name());
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
@@ -69,9 +70,39 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         return result.toString();
     }
 
-    public JobSeeker getJobSeekerProfile(String jid) {
-        JobSeeker JobSeeker = jobSeekerRepository.findByJid(Integer.parseInt(jid));
-        return JobSeeker;
+    public void updateAvatar(
+            String url,
+            String userId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
+        jobSeeker.setAvatar_url(url);
+        jobSeekerRepository.save(jobSeeker);
+    }
+
+    public void updateResume(
+            String url,
+            String userId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
+        jobSeeker.setResume_url(url);
+        jobSeekerRepository.save(jobSeeker);
+    }
+
+    public void updateContactInfo(
+            ContactInfoDto body,
+            String userId) {
+        JobSeeker user = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
+
+        // Update contact information
+        if (body.getWeb_url() != null) {
+            user.setWeb_url(body.getWeb_url());
+        }
+        if (body.getPhone() != null) {
+            user.setPhone(body.getPhone());
+        }
+
+        jobSeekerRepository.save(user);
     }
 
 }

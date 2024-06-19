@@ -58,9 +58,9 @@ public class UserService {
 
     public User addNew(User user) {
         user.setCreated_at(new Date(System.currentTimeMillis()));
-        int roleType = user.getRoleType().getRoleTypeId();
+        int userTypeId = user.getRoleType().getRoleTypeId();
 
-        if (roleType == 1) {
+        if (userTypeId == 1) {
             jobSeekerRepository.save(new JobSeeker(user));
         } else {
             enterpriseRepository.save(new Enterprise(user));
@@ -69,6 +69,7 @@ public class UserService {
         return user;
     }
 
+    //--Ham signup--//
     public User signup(SignupDTO user) {
         String user_name = user.getUser_name();
         String email = user.getEmail().toLowerCase();
@@ -88,7 +89,6 @@ public class UserService {
         User newUser = userRepository.save(
                 new User(
                         user_name, email, password,
-                        "https://res.cloudinary.com/dz9kynjwb/image/upload/v1717770585/OIP_bsmlku.jpg",
                         null, 0
                 ));
         RoleType roleType = roleTypeRepository.findByRoleTypeId(roleTypeId)
@@ -150,7 +150,7 @@ public class UserService {
         }
         userRepository.save(
                 new
-                        User(user.getName(), user.getEmail().toLowerCase(), null, user.getPicture(), user.getS_id(), 1));
+                        User(user.getName(), user.getEmail().toLowerCase(), null,  user.getS_id(), 1));
         User createdUser = userRepository.findByGid(user.getS_id());
         return createdUser;
     }
@@ -177,24 +177,6 @@ public class UserService {
         return user;
     }
 
-    public User updateContactInfo(
-            ContactInfoDto body,
-            String userId) {
-        User user = userRepository.findByUid(Integer.parseInt(userId));
-        if (user == null) {
-            throw new IllegalArgumentException("User not found with ID: " + userId);
-        }
-
-        // Update contact information
-        if (body.getWeb_url() != null) {
-            user.setWeb_url(body.getWeb_url());
-        }
-        if (body.getPhone() != null) {
-            user.setPhone(body.getPhone());
-        }
-
-        return userRepository.save(user);
-    }
 
     public void updatePassword(
             UpdatePasswordDTO body,
@@ -231,19 +213,4 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void updateAvatar(
-            String url,
-            String userId) {
-        User user = userRepository.findByUid(Integer.parseInt(userId));
-        user.setAvatar_url(url);
-        userRepository.save(user);
-    }
-
-    public void updateResume(
-            String url,
-            String userId) {
-        User user = userRepository.findByUid(Integer.parseInt(userId));
-        user.setResume_url(url);
-        userRepository.save(user);
-    }
 }
