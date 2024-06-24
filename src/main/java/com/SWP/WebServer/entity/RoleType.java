@@ -1,6 +1,5 @@
 package com.SWP.WebServer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +19,7 @@ public class RoleType {
     private int roleTypeId;
 
     private String roleTypeName;
-
-    @OneToMany(targetEntity = User.class,mappedBy = "roleType",cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = User.class, mappedBy = "roleType", cascade = CascadeType.ALL)
     private List<User> userList;
 
 }

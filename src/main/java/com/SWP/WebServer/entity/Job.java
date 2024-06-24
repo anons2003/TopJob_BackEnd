@@ -1,10 +1,16 @@
 package com.SWP.WebServer.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "Job")
 @Table(name = "jobs")
 public class Job {
@@ -19,10 +25,10 @@ public class Job {
     private String description;
 
     @Column(name = "job_type")
-    private String jobType;
+    private int jobType;
 
     @Column(name = "job_category")
-    private String jobCategory;
+    private int jobCategory;
 
     @Column(name = "salary_type")
     private String salaryType;
@@ -47,6 +53,16 @@ public class Job {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // Getters and setters
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name="posted_eid",
+            referencedColumnName = "eid"
+    )
+    private Enterprise enterprise;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -58,141 +74,5 @@ public class Job {
         updatedAt = LocalDateTime.now();
     }
 
-    // Getters and setters
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
-
-    public String getJobCategory() {
-        return jobCategory;
-    }
-
-    public void setJobCategory(String jobCategory) {
-        this.jobCategory = jobCategory;
-    }
-
-    public String getSalaryType() {
-        return salaryType;
-    }
-
-    public void setSalaryType(String salaryType) {
-        this.salaryType = salaryType;
-    }
-
-    public BigDecimal getMinSalary() {
-        return minSalary;
-    }
-
-    public void setMinSalary(BigDecimal minSalary) {
-        this.minSalary = minSalary;
-    }
-
-    public BigDecimal getMaxSalary() {
-        return maxSalary;
-    }
-
-    public void setMaxSalary(BigDecimal maxSalary) {
-        this.maxSalary = maxSalary;
-    }
-
-    public String getSkills() {
-        return skills;
-    }
-
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
-
-    public String getQualifications() {
-        return qualifications;
-    }
-
-    public void setQualifications(String qualifications) {
-        this.qualifications = qualifications;
-    }
-
-    public String getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String experience) {
-        this.experience = experience;
-    }
-
-    public String getIndustry() {
-        return industry;
-    }
-
-    public void setIndustry(String industry) {
-        this.industry = industry;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
