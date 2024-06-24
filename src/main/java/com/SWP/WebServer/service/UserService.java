@@ -69,6 +69,7 @@ public class UserService {
         return user;
     }
 
+
     //--Ham signup--//
     public User signup(SignupDTO user) {
         String user_name = user.getUser_name();
@@ -150,7 +151,7 @@ public class UserService {
         }
         userRepository.save(
                 new
-                        User(user.getName(), user.getEmail().toLowerCase(), null,  user.getS_id(), 1));
+                        User(user.getName(), user.getEmail().toLowerCase(), null, user.getS_id(), 1));
         User createdUser = userRepository.findByGid(user.getS_id());
         return createdUser;
     }
@@ -171,12 +172,6 @@ public class UserService {
         }
         return user;
     }
-
-    public User getUserProfile(String id) {
-        User user = userRepository.findByUid(Integer.parseInt(id));
-        return user;
-    }
-
 
     public void updatePassword(
             UpdatePasswordDTO body,

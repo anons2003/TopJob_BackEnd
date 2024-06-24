@@ -1,4 +1,4 @@
-package com.SWP.WebServer.service;
+package com.SWP.WebServer.service.Impl;
 
 import com.SWP.WebServer.dto.AppliedCVDto;
 import com.SWP.WebServer.entity.CVApply;

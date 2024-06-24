@@ -8,6 +8,7 @@ import com.SWP.WebServer.exception.DuplicateCVException;
 import com.SWP.WebServer.repository.CVRepository;
 import com.SWP.WebServer.repository.EnterpriseRepository;
 import com.SWP.WebServer.repository.UserRepository;
+import com.SWP.WebServer.service.Impl.CVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

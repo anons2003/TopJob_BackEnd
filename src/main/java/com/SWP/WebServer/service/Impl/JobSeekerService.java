@@ -1,4 +1,4 @@
-package com.SWP.WebServer.service;
+package com.SWP.WebServer.service.Impl;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
@@ -20,6 +20,7 @@ public interface JobSeekerService {
     void updateResume(
             String url,
             String userId);
+
 
 
 }

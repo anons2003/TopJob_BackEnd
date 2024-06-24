@@ -25,10 +25,10 @@ public class Job {
     private String description;
 
     @Column(name = "job_type")
-    private String jobType;
+    private int jobType;
 
     @Column(name = "job_category")
-    private String jobCategory;
+    private int jobCategory;
 
     @Column(name = "salary_type")
     private String salaryType;
