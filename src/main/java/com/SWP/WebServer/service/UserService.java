@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -208,4 +209,22 @@ public class UserService {
         userRepository.delete(user);
     }
 
+
+    // admin
+    public User postUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUserById(int id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    // hàm lấy ra tổng user từ repositpry
+    public long getTotalUsers() {
+        return userRepository.count();
+    }
 }

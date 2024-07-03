@@ -7,6 +7,7 @@ import com.SWP.WebServer.entity.RoleType;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.repository.RoleTypeRepository;
+import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.response.LoginResponse;
 import com.SWP.WebServer.service.CloudinaryService;
 import com.SWP.WebServer.service.Impl.CVService;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 
@@ -43,6 +45,9 @@ public class UserController {
     CVService cvService;
     @Autowired
     RoleTypeRepository roleTypeRepository;
+    //admin
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/usertypes")
     public List<RoleType> getAllUserTypes() {
@@ -206,4 +211,46 @@ public class UserController {
             throw new ApiRequestException("expired_session", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // admin
+    @GetMapping("/totalUsers")
+    public ResponseEntity<Long> getTotalUsers() {
+        long totalUsers = userService.getTotalUsers();
+        return ResponseEntity.ok(totalUsers);
+    }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.ok(userOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<User> updateUserStatus(@PathVariable int id, @RequestBody User updatedUser) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setIsActive(updatedUser.getIsActive());
+            userRepository.save(user);
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PostMapping("/users")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        User newUser = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+
 }

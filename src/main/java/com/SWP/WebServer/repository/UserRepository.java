@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmailAndGid(String email, String s_id);
     User findByRoleType_RoleTypeId(int roleType);
     User findByEmailAndRoleType_RoleTypeId(String email, int roleTypeId);
+
+    // lấy tổng số User
+    long count();
 }
