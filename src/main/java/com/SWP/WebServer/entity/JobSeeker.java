@@ -1,15 +1,22 @@
 package com.SWP.WebServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobSeeker {
+public class
+JobSeeker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int jid;
@@ -26,7 +33,7 @@ public class JobSeeker {
     private String first_name;
     private String last_name;
     private String occupation;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String intro;
     private byte gender;
     private String dob;
@@ -40,7 +47,19 @@ public class JobSeeker {
     )
     private User user;
 
+    //Old bookmark
+//    @JsonIgnoreProperties("jobSeekers")
+//    @ManyToMany(mappedBy = "jobSeekers")
+//    private List<Job> bookmarkedJobs;
+
     //
+
+    //New bookmark
+    @JsonIgnoreProperties("jobSeekers")
+    @OneToMany(mappedBy = "jobSeekers", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarks;
+    //
+
     public JobSeeker(User user) {
         this.user = user;
         this.avatar_url = "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg";

@@ -2,6 +2,8 @@ package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
+import com.SWP.WebServer.entity.Bookmark;
+import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.JobSeekerRepository;
@@ -9,6 +11,7 @@ import com.SWP.WebServer.service.Impl.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,6 +94,12 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
         jobSeeker.setResume_url(url);
         jobSeekerRepository.save(jobSeeker);
+    }
+
+    @Override
+    public Job getBookmarks(String userId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
+        return null;
     }
 
     public void updateContactInfo(ContactInfoDto body, String userId) {
