@@ -12,9 +12,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class Template {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String imagerURL;
+    private String imageURL;
     private String title;
     private Date timestamp;
 }

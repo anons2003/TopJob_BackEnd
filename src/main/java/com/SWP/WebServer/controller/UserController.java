@@ -196,4 +196,9 @@ public class UserController {
             throw new ApiRequestException("expired_session", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/totalUsers")
+    public ResponseEntity<Long> countUsers() {
+        long totalUsers = userService.countUsers();
+        return ResponseEntity.ok().body(totalUsers);
+    }
 }

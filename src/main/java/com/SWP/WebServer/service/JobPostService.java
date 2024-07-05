@@ -14,11 +14,17 @@ public class JobPostService {
     @Autowired
     private JobPostRepository jobPostRepository;
 
-    public List<Job> getAllJobs(){
+    public List<Job> getAllJobs() {
         return jobPostRepository.findAll();
     }
 
+    // Phương thức lưu một bài đăng công việc
     public Job saveJob(Job job) {
         return jobPostRepository.save(job);
+    }
+
+    // Phương thức đếm tổng số bài đăng công việc
+    public long countJobs() {
+        return jobPostRepository.count();
     }
 }
