@@ -23,7 +23,7 @@ public class CVApply {
     private byte isApllied;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
     @JoinColumn(
             name = "userId",
@@ -32,7 +32,7 @@ public class CVApply {
     private User user;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
 
     @JoinColumn(

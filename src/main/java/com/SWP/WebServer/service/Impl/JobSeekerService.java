@@ -2,6 +2,7 @@ package com.SWP.WebServer.service.Impl;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
+import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 
 public interface JobSeekerService {
@@ -22,5 +23,5 @@ public interface JobSeekerService {
             String userId);
 
 
-
+    Job  getBookmarks(String userId);
 }
