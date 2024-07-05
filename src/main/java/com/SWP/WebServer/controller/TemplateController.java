@@ -24,13 +24,13 @@ public class TemplateController {
         return templateService.getAllTemplates();
     }
 
-    @GetMapping("/templates/{id}")
+    @GetMapping("/resumeDetail/{id}")
     public ResponseEntity<Template> getTemplateById(@PathVariable Long id) {
         Optional<Template> template = templateService.getTemplateById(id);
         return template.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/templates")
+    @PostMapping("/templates-add")
     public ResponseEntity<Template> createTemplate(
             @RequestParam("image") MultipartFile file,
             @ModelAttribute TemplateDTO templateDTO) {
@@ -38,10 +38,12 @@ public class TemplateController {
         return ResponseEntity.ok(newTemplate);
     }
 
-    @DeleteMapping("/templates/{id}")
+    @DeleteMapping("/templates-del/{id}")
     public ResponseEntity<Void> deleteTemplate(@PathVariable Long id) {
         templateService.deleteTemplate(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
 
