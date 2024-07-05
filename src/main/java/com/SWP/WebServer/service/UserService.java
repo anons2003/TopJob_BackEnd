@@ -17,10 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -211,43 +208,4 @@ public class UserService {
         userRepository.delete(user);
     }
 
-
-    // admin
-    public User postUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User getUserById(int id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    // hàm lấy ra tổng user từ repositpry
-    public long getTotalUsers() {
-        return userRepository.count();
-    }
-    public double calculatePercentIncrease() {
-
-        List<User> users = userRepository.findAll();
-
-        // Tính toán số lượng người dùng trong 1 tuần qua
-        LocalDate now = LocalDate.now();
-        LocalDate oneWeekAgo = now.minusDays(7);
-
-        long countThisWeek = users.stream()
-                .filter(user -> user.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(oneWeekAgo))
-                .count();
-
-        long countLastWeek = users.stream()
-                .filter(user -> user.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(oneWeekAgo))
-                .count();
-
-        // Tính phần trăm tăng
-        double percentIncrease = ((double) (countThisWeek - countLastWeek) / countLastWeek) * 100;
-
-        return percentIncrease;
-    }
 }

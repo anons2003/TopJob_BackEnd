@@ -11,10 +11,6 @@ public class JobPostService {
 
     @Autowired
     private JobPostRepository jobPostRepository;
-    //adminn
-    public long getTotalJobs() {
-        return jobPostRepository.count();
-    }
 
     public Job saveJob(Job job) {
         return jobPostRepository.save(job);
