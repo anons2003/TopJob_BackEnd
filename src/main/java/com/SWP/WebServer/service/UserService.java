@@ -208,4 +208,12 @@ public class UserService {
         userRepository.delete(user);
     }
 
+
+
+    // admin
+    // đếm user
+    public long countUsers() {
+        return userRepository.count();
+    }
+
 }
