@@ -51,7 +51,6 @@ public class CVServiceImpl implements CVService {
         cvApply.setIsApllied((byte) 0);
         cvApply.setUser(user);
         cvApply.setEnterprise(enterprise);
-        cvApply.setReApplyStatus((byte) 0);
 
         return cvRepository.save(cvApply);
     }
@@ -66,7 +65,6 @@ public class CVServiceImpl implements CVService {
         cvApply.setJob(body.getJob());
         cvApply.setJobType(body.getJobType());
         cvApply.setDescription(body.getDescription());
-        cvApply.setReApplyStatus((byte) 1);
 
         return cvRepository.save(cvApply);
     }

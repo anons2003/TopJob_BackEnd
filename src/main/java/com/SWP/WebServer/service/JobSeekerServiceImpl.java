@@ -40,6 +40,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         // Update user fields
         if (body.getCity() != null) user.setCity(body.getCity());
         if (body.getState() != null) user.setState(body.getState());
+
         if (body.getFirst_name() != null) user.setFirst_name(body.getFirst_name());
         if (body.getLast_name() != null) user.setLast_name(body.getLast_name());
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
