@@ -218,6 +218,12 @@ public class UserController {
         long totalUsers = userService.getTotalUsers();
         return ResponseEntity.ok(totalUsers);
     }
+    // phần trăm tăng trong 1  tuần
+    @GetMapping("/percentIncrease")
+    public ResponseEntity<Double> getPercentIncrease() {
+        double percentIncrease = userService.calculatePercentIncrease();
+        return ResponseEntity.ok(percentIncrease);
+    }
 
     @GetMapping("/users")
     public List<User> getAllUsers() {

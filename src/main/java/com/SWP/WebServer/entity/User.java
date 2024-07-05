@@ -28,7 +28,17 @@ public class User {
     private Date updated_at;
     //
     private double account_balance;
+    // admin
 
+    @Transient // Đánh dấu là không lưu vào cơ sở dữ liệu
+    private double percentIncrease;
+    public Date getCreatedAt() {
+        return created_at;
+    }
+
+    public void setCreatedAt(Date created_at) {
+        this.created_at = created_at;
+    }
     //
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
