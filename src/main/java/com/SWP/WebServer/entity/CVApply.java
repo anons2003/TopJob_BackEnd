@@ -21,9 +21,10 @@ public class CVApply {
     private String jobType;
     private String description;
     private byte isApllied;
+    private byte reApplyStatus;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
     @JoinColumn(
             name = "userId",
@@ -32,7 +33,7 @@ public class CVApply {
     private User user;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
 
     @JoinColumn(

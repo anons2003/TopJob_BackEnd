@@ -40,8 +40,6 @@ public class UserController {
     @Autowired
     CloudinaryService cloudinaryService;
     @Autowired
-    CVService cvService;
-    @Autowired
     RoleTypeRepository roleTypeRepository;
 
     @GetMapping("/usertypes")
@@ -110,14 +108,6 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/apply-cv/{eid}")
-    public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
-                                         @RequestHeader("Authorization") String token,
-                                         @PathVariable("eid") int eid) {
-        String userId = getUserIdFromToken(token);
-        CVApply cvApply = cvService.applyCV(body, userId, eid);
-        return ResponseEntity.ok(cvApply);
-    }
 
     @PatchMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO body) {
