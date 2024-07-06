@@ -19,6 +19,7 @@ public class JobController {
         this.jobPostService = jobPostService;
     }
 
+    // get jobs
     @GetMapping("/getjobs")
     public ResponseEntity<?> getAllJobs() {
         List<Job> jobs = jobPostService.getAllJobs();

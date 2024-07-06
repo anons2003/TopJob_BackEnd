@@ -6,6 +6,7 @@ import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.service.BookmarkService;
 import com.SWP.WebServer.service.CVServiceImpl;
+import com.SWP.WebServer.service.CloudinaryService;
 import com.SWP.WebServer.service.Impl.CVService;
 import com.SWP.WebServer.service.Impl.JobSeekerService;
 import com.SWP.WebServer.service.JobSeekerServiceImpl;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/jobSeeker")
@@ -32,6 +35,9 @@ public class JobSeekerController {
 
     @Autowired
     private CVService cvService;
+
+    @Autowired
+    CloudinaryService cloudinaryService;
 
 //    @GetMapping("bookmarks")
 //    public  ResponseEntity<?> bookmarkJob(@RequestHeader("Authorization") String token){
@@ -71,6 +77,25 @@ public class JobSeekerController {
         CVApply cvApply = cvService.applyCV(body, userId, eid);
         return ResponseEntity.ok(cvApply);
     }
+
+    @PatchMapping("/upload-resume/{eid}")
+    public ResponseEntity<?> updateResume(
+            @RequestParam(value = "resume", required = false) MultipartFile resume,
+            @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
+            @RequestHeader("Authorization") String token,
+            @PathVariable("eid") int eid) {
+        String userId = getUserIdFromToken(token);
+
+        // Lấy tên file gốc không bao gồm phần mở rộng
+        String originalFilename = resume.getOriginalFilename();
+        String publicId = originalFilename != null ? originalFilename.split("\\.")[0] : "";
+        Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
+
+        String url = (String) data.get("url");
+        cvService.uploadResume(url, userId,eid);
+        return ResponseEntity.ok("Update resume successfully");
+    }
+
 
     @PatchMapping("/reapply-cv/{eid}")
     public ResponseEntity<?> reApplyForJob(@RequestBody AppliedCVDto body,

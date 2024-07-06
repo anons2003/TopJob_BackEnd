@@ -14,6 +14,7 @@ import com.SWP.WebServer.service.Impl.JobSeekerService;
 import com.SWP.WebServer.service.JobSeekerServiceImpl;
 import com.SWP.WebServer.service.UserService;
 import com.SWP.WebServer.token.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,6 +155,29 @@ public class UserController {
         JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
         return ResponseEntity.ok(updatedUser);
     }
+//@PatchMapping("/update-info")
+//public ResponseEntity<?> updateUserInfo(
+//        @RequestPart("updateInfoDTO") String updateInfoDTOJson,
+//        @RequestPart(value = "resume", required = false) MultipartFile resume,
+//        @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
+//        @RequestHeader("Authorization") String token) throws IOException {
+//    String userId = getUserIdFromToken(token);
+//
+//    // Convert JSON string to UpdateInfoDTO object
+//    ObjectMapper objectMapper = new ObjectMapper();
+//    UpdateInfoDTO updateInfoDTO = objectMapper.readValue(updateInfoDTOJson, UpdateInfoDTO.class);
+//
+//    if (resume != null && !resume.isEmpty()) {
+//        String originalFilename = resume.getOriginalFilename();
+//        String publicId = originalFilename != null ? originalFilename.split("\\.")[0] : "";
+//        Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
+//        String url = (String) data.get("url");
+//        updateInfoDTO.setResume_url(url);
+//    }
+//
+//    JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
+//    return ResponseEntity.ok(updatedUser);
+//}
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(
@@ -171,16 +195,21 @@ public class UserController {
         return ResponseEntity.ok("Update avatar successfully");
     }
 
-//    @PatchMapping("/update-resume")
-//    public ResponseEntity<?> updateResume(
-//            @RequestParam(value = "resume", required = false) MultipartFile resume,
-//            @RequestHeader("Authorization") String token) {
-//        String userId = getUserIdFromToken(token);
-//        Map<String, String> data = cloudinaryService.upload(resume);
-//        String url = data.get("url");
-//        jobSeekerService.updateResume(url, userId);
-//        return ResponseEntity.ok("Update resume successfully");
-//    }
+    @PatchMapping("/update-resume")
+    public ResponseEntity<?> updateResume(
+            @RequestParam(value = "resume", required = false) MultipartFile resume,
+            @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
+            @RequestHeader("Authorization") String token) {
+        String userId = getUserIdFromToken(token);
+
+        // Lấy tên file gốc không bao gồm phần mở rộng
+        String originalFilename = resume.getOriginalFilename();
+        String publicId = originalFilename != null ? originalFilename.split("\\.")[0] : "";
+        Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
+        String url = (String) data.get("url");
+        jobSeekerService.updateResume(url, userId);
+        return ResponseEntity.ok("Update resume successfully");
+    }
 
     @DeleteMapping("/delete-account")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {

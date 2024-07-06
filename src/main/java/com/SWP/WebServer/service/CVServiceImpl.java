@@ -27,6 +27,7 @@ public class CVServiceImpl implements CVService {
     @Autowired
     UserRepository userRepository;
 
+
     @Override
     public CVApply applyCV(AppliedCVDto body, String userId, int eid) {
         User user = userRepository.findByUid(Integer.parseInt(userId));
@@ -83,6 +84,13 @@ public class CVServiceImpl implements CVService {
     @Override
     public List<CVApply> GetAllCVByUserId(String userId) {
         return cvRepository.findAllByUser_Uid(Integer.parseInt(userId));
+    }
+
+    @Override
+    public void uploadResume(String url, String userId,int eid) {
+        CVApply cvApply = cvRepository.findByUser_UidAndEnterprise_Eid(Integer.parseInt(userId),eid);
+        cvApply.setResume_url(url);
+        cvRepository.save(cvApply);
     }
 
 
