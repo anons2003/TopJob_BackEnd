@@ -26,6 +26,11 @@ public class JobSeekerServiceImpl implements JobSeekerService {
                 findByUser_Uid(Integer.parseInt(userId));
     }
 
+    @Override
+    public JobSeeker getUserProfileByJid(int userId) {
+        return jobSeekerRepository.findByJid(userId);
+    }
+
     public JobSeeker getJobSeerkerProfile(String user_id) {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(user_id));
         return jobSeeker;
