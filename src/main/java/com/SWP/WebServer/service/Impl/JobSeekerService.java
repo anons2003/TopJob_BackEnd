@@ -24,4 +24,8 @@ public interface JobSeekerService {
 
 
     Job  getBookmarks(String userId);
+
+    JobSeeker getUserProfile(String userId);
+
+    JobSeeker getUserProfileByJid(int userId);
 }

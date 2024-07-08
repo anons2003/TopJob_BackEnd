@@ -17,4 +17,6 @@ public interface CVService {
     String deleteCV(String userId, int eid);
 
     List<CVApply> GetAllCVByUserId(String userId);
+
+    void uploadResume(String url, String userId,int eid);
 }

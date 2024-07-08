@@ -26,6 +26,11 @@ public class JobSeekerServiceImpl implements JobSeekerService {
                 findByUser_Uid(Integer.parseInt(userId));
     }
 
+    @Override
+    public JobSeeker getUserProfileByJid(int userId) {
+        return jobSeekerRepository.findByJid(userId);
+    }
+
     public JobSeeker getJobSeerkerProfile(String user_id) {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(user_id));
         return jobSeeker;
@@ -46,12 +51,16 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
         if (body.getOccupation() != null) user.setOccupation(body.getOccupation());
         if (body.getEmail() != null) user.getUser().setEmail(body.getEmail());
+        if(body.getDob() !=null) user.setDob(body.getDob());
+        user.setGender(body.getGender());
 
         // Handle intro content and embedded videos
         if (body.getIntro() != null) {
             String transformedIntro = transformIntroContent(body.getIntro());
             user.setIntro(transformedIntro);
         }
+
+        if(body.getResume_url() !=null)user.setResume_url(body.getResume_url());
 
         return jobSeekerRepository.save(user);
     }

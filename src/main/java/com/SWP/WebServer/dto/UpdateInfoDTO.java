@@ -18,6 +18,8 @@ public class UpdateInfoDTO {
     private String last_name;
     private String user_name;
     private String occupation;
+    private byte gender;
+    private String dob;
     private String intro;
     private String email;
     private String resume_url;

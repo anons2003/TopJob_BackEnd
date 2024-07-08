@@ -14,18 +14,16 @@ public class JobController {
 
     private final JobPostService jobPostService;
 
+    @Autowired
+    public JobController(JobPostService jobPostService) {
+        this.jobPostService = jobPostService;
+    }
+
+    // get jobs
     @GetMapping("/getjobs")
     public ResponseEntity<?> getAllJobs() {
         List<Job> jobs = jobPostService.getAllJobs();
         return ResponseEntity.ok(jobs);
-    }
-
-    @PostMapping
-    public ResponseEntity<Job> createJob(@RequestBody Job job) {
-
-    @Autowired
-    public JobController(JobPostService jobPostService) {
-        this.jobPostService = jobPostService;
     }
 
     // Lưu một bài đăng công việc
