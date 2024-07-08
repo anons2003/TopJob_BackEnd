@@ -5,6 +5,9 @@ import com.SWP.WebServer.dto.UpdateInfoDTO;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface JobSeekerService {
     void updateContactInfo(
             ContactInfoDto body,
@@ -28,4 +31,7 @@ public interface JobSeekerService {
     JobSeeker getUserProfile(String userId);
 
     JobSeeker getUserProfileByJid(int userId);
+
+    List<JobSeeker> getAllJobSeekers();
+    Optional<JobSeeker> getJobSeekerById(int id);
 }
