@@ -39,13 +39,16 @@ public class User {
     private RoleType roleType;
 
 
+    public boolean isActive() {
+        return isActive == 1;
+    }
 
-    public User(
-            String user_name,
-            String email,
-            String password,
-            String gid,
-            int is_verify_email) {
+    public void setActive(boolean active) {
+        this.isActive = (byte) (active ? 1 : 0);
+    }
+
+
+    public User(String user_name, String email, String password, String gid, int is_verify_email) {
         this.user_name = user_name;
         this.email = email;
         this.password = password;
@@ -53,8 +56,8 @@ public class User {
         this.is_verify_email = is_verify_email;
         this.created_at = new Date();
         this.updated_at = new Date();
-        this.isActive=0;
-        this.account_balance=0;
+        this.isActive = 1; // Active by default
+        this.account_balance = 0;
     }
 
 }
