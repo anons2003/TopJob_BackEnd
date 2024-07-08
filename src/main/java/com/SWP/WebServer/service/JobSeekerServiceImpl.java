@@ -2,6 +2,8 @@ package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
+import com.SWP.WebServer.entity.Bookmark;
+import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.JobSeekerRepository;
@@ -9,6 +11,7 @@ import com.SWP.WebServer.service.Impl.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +24,11 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     public JobSeeker getUserProfile(String userId) {
         return jobSeekerRepository.
                 findByUser_Uid(Integer.parseInt(userId));
+    }
+
+    @Override
+    public JobSeeker getUserProfileByJid(int userId) {
+        return jobSeekerRepository.findByJid(userId);
     }
 
     public JobSeeker getJobSeerkerProfile(String user_id) {
@@ -37,17 +45,22 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         // Update user fields
         if (body.getCity() != null) user.setCity(body.getCity());
         if (body.getState() != null) user.setState(body.getState());
+
         if (body.getFirst_name() != null) user.setFirst_name(body.getFirst_name());
         if (body.getLast_name() != null) user.setLast_name(body.getLast_name());
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
         if (body.getOccupation() != null) user.setOccupation(body.getOccupation());
         if (body.getEmail() != null) user.getUser().setEmail(body.getEmail());
+        if(body.getDob() !=null) user.setDob(body.getDob());
+        user.setGender(body.getGender());
 
         // Handle intro content and embedded videos
         if (body.getIntro() != null) {
             String transformedIntro = transformIntroContent(body.getIntro());
             user.setIntro(transformedIntro);
         }
+
+        if(body.getResume_url() !=null)user.setResume_url(body.getResume_url());
 
         return jobSeekerRepository.save(user);
     }
@@ -91,6 +104,12 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
         jobSeeker.setResume_url(url);
         jobSeekerRepository.save(jobSeeker);
+    }
+
+    @Override
+    public Job getBookmarks(String userId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
+        return null;
     }
 
     public void updateContactInfo(ContactInfoDto body, String userId) {
