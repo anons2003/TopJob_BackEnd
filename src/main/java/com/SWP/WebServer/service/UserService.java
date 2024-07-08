@@ -11,6 +11,7 @@ import com.SWP.WebServer.repository.JobSeekerRepository;
 import com.SWP.WebServer.repository.RoleTypeRepository;
 import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.token.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -214,6 +216,30 @@ public class UserService {
     // đếm user
     public long countUsers() {
         return userRepository.count();
+    }
+
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    public User toggleUserActiveStatus(int userId, boolean newStatus) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setIsActive(newStatus ? (byte) 1 : (byte) 0);
+        return userRepository.save(user);
+    }
+    @Transactional
+    public void toggleActiveStatus(int id, boolean isActive) {
+        jobSeekerRepository.findById(id)
+                .ifPresent(jobSeeker -> {
+                    User user = jobSeeker.getUser();
+                    user.setActive(isActive);
+                    userRepository.save(user);
+                });
+    }
+
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
 }

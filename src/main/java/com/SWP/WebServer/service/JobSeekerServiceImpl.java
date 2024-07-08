@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,9 +22,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
 
+    @Override
     public JobSeeker getUserProfile(String userId) {
-        return jobSeekerRepository.
-                findByUser_Uid(Integer.parseInt(userId));
+        return jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
     }
 
     @Override
@@ -31,11 +32,17 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         return jobSeekerRepository.findByJid(userId);
     }
 
-    public JobSeeker getJobSeerkerProfile(String user_id) {
-        JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(user_id));
-        return jobSeeker;
+    @Override
+    public List<JobSeeker> getAllJobSeekers() {
+        return jobSeekerRepository.findAll();
     }
 
+    @Override
+    public Optional<JobSeeker> getJobSeekerById(int id) {
+        return jobSeekerRepository.findById(id);
+    }
+
+    @Override
     public JobSeeker updateInfo(UpdateInfoDTO body, String userId) {
         int id = Integer.parseInt(userId);
         JobSeeker user = jobSeekerRepository.findByUser_Uid(id);
@@ -45,7 +52,6 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         // Update user fields
         if (body.getCity() != null) user.setCity(body.getCity());
         if (body.getState() != null) user.setState(body.getState());
-
         if (body.getFirst_name() != null) user.setFirst_name(body.getFirst_name());
         if (body.getLast_name() != null) user.setLast_name(body.getLast_name());
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
@@ -93,13 +99,14 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         return result.toString();
     }
 
-
+    @Override
     public void updateAvatar(String url, String userId) {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
         jobSeeker.setAvatar_url(url);
         jobSeekerRepository.save(jobSeeker);
     }
 
+    @Override
     public void updateResume(String url, String userId) {
         JobSeeker jobSeeker = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
         jobSeeker.setResume_url(url);
@@ -112,6 +119,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         return null;
     }
 
+    @Override
     public void updateContactInfo(ContactInfoDto body, String userId) {
         JobSeeker user = jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
         if (user == null) {
@@ -128,6 +136,4 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
         jobSeekerRepository.save(user);
     }
-
-
 }
