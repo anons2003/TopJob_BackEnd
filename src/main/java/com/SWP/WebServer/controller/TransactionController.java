@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -84,6 +83,7 @@ public class TransactionController {
         BigDecimal monthlyRevenue = transactionService.calculateMonthlyRevenue(LocalDate.now());
         return ResponseEntity.ok(monthlyRevenue != null ? monthlyRevenue.setScale(2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO);
     }
+
 
 
 
