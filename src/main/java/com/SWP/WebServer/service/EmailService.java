@@ -56,7 +56,7 @@ public class EmailService {
                     + "<p>You got a new message from " + name + ":</p>"
                     + "<p>Email: " + email + "</p>"
                     + "<p>Subject: " + subject + "</p>"
-                    + "<p>" + body + "</p>"
+                    + "<p>Message: " + body + "</p>"
                     + "</body></html>";
 
             mimeMessageHelper.setText(htmlBody, true); // Set to true to indicate HTML
