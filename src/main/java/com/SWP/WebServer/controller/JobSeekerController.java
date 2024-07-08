@@ -7,7 +7,6 @@ import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ApiRequestException;
-import com.SWP.WebServer.repository.JobSeekerRepository;
 import com.SWP.WebServer.service.*;
 import com.SWP.WebServer.service.Impl.CVService;
 import com.SWP.WebServer.service.Impl.JobSeekerService;
@@ -23,14 +22,11 @@ import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/jobSeeker")
 public class JobSeekerController {
     @Autowired
-    private final JobSeekerRepository jobSeekerRepository;
-    private UserService userService;
     private JobSeekerService jobSeekerService;
 
     @Autowired
@@ -47,10 +43,6 @@ public class JobSeekerController {
 
     @Autowired
     private EmailService emailService;
-
-    public JobSeekerController(JobSeekerRepository jobSeekerRepository) {
-        this.jobSeekerRepository = jobSeekerRepository;
-    }
 
     @GetMapping("/candidate-profile")
     public JobSeeker getProfile(@RequestHeader("Authorization") String token) {
@@ -252,22 +244,6 @@ public class JobSeekerController {
         String message =emailService.sendMailFromJobSeeker(jid,name,email,subject,body);
 
         return ResponseEntity.ok(message);
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<List<JobSeeker>> getAllJobSeekers() {
-        List<JobSeeker> jobSeekers = jobSeekerService.getAllJobSeekers();
-        return ResponseEntity.ok(jobSeekers);
-    }
-
-    @GetMapping("/view/{id}")
-    public ResponseEntity<JobSeeker> getJobSeekerById(@PathVariable int id) {
-        Optional<JobSeeker> jobSeeker = jobSeekerRepository.findById(id);
-        if (jobSeeker.isPresent()) {
-            return ResponseEntity.ok(jobSeeker.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
 }
