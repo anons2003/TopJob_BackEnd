@@ -58,6 +58,8 @@ public class Job {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "is_active")
+    private boolean isActive;
     
     // Getters and setters
     @ManyToOne(

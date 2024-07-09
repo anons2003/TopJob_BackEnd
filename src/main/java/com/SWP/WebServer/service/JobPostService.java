@@ -35,4 +35,14 @@ public class JobPostService {
         // Triển khai logic tìm công việc theo ID từ cơ sở dữ liệu
         return jobPostRepository.findById(id);
     }
+    public void toggleActiveStatus(Long id) {
+        Optional<Job> optionalJob = jobPostRepository.findById(id);
+        if (optionalJob.isPresent()) {
+            Job job = optionalJob.get();
+            job.setActive(!job.isActive());
+            jobPostRepository.save(job);
+        } else {
+            throw new IllegalArgumentException("Job not found with ID: " + id);
+        }
+    }
 }

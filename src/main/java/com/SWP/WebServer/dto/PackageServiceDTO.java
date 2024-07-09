@@ -4,7 +4,7 @@ import lombok.Data;
 @Data
 public class PackageServiceDTO {
 
-    private Long packageId;
+    private int packageId;
 
     private String packageName;
 
@@ -18,7 +18,7 @@ public class PackageServiceDTO {
     public PackageServiceDTO() {
     }
 
-    public PackageServiceDTO(Long packageId, String packageName, String description, Double price, Integer duration) {
+    public PackageServiceDTO(int packageId, String packageName, String description, Double price, Integer duration) {
         this.packageId = packageId;
         this.packageName = packageName;
         this.description = description;
@@ -27,11 +27,11 @@ public class PackageServiceDTO {
     }
 
     // Getters and setters
-    public Long getPackageId() {
+    public int getPackageId() {
         return packageId;
     }
 
-    public void setPackageId(Long packageId) {
+    public void setPackageId(int packageId) {
         this.packageId = packageId;
     }
 
