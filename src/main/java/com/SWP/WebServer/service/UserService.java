@@ -241,31 +241,29 @@ public class UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
-    @Transactional
-    public User createUser(UserDTO userDTO) {
-        // Determine role type based on userRoleId
-        RoleType roleType = determineRoleType(userDTO.getUserRoleId());
 
-        // Create User entity
-        User user = new User();
-        user.setUser_name(userDTO.getUserName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+    public JobSeeker createJobSeeker(JobSeekerDTO jobSeekerDTO) {
+        RoleType roleType = roleTypeRepository.findById(jobSeekerDTO.getUserRoleId())
+                .orElseThrow(() -> new RuntimeException("RoleType not found"));
+
+        User user = new User(
+                jobSeekerDTO.getUserName(),
+                jobSeekerDTO.getEmail(),
+                jobSeekerDTO.getPassword(),
+                "", // assuming gid is not provided in DTO
+                0 // assuming is_verify_email is 0 by default
+        );
         user.setRoleType(roleType);
 
-        // Save User entity to database
-        user = userRepository.save(user);
-
-        return user;
+        User savedUser = userRepository.save(user);
+        JobSeeker jobSeeker = new JobSeeker(savedUser);
+        return jobSeekerRepository.save(jobSeeker);
     }
 
-    private RoleType determineRoleType(Integer userRoleId) {
-        if (userRoleId == null || userRoleId == 1) {
-            return roleTypeRepository.findById(1).orElseThrow(() -> new RuntimeException("Job Seeker role not found"));
-        } else if (userRoleId == 2) {
-            return roleTypeRepository.findById(2).orElseThrow(() -> new RuntimeException("Enterprise role not found"));
-        } else {
-            throw new IllegalArgumentException("Invalid user role ID");
-        }
+    public User createEnterprise(User user) {
+        RoleType roleType = roleTypeRepository.findById(2)
+                .orElseThrow(() -> new RuntimeException("RoleType not found"));
+        user.setRoleType(roleType);
+        return userRepository.save(user);
     }
 }

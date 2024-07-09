@@ -148,7 +148,16 @@ public ResponseEntity<User> signup(@RequestBody SignupDTO user) {
         long totalUsers = userService.countUsers();
         return ResponseEntity.ok().body(totalUsers);
     }
+    @PostMapping("/job-seekers")
+    public ResponseEntity<JobSeeker> createJobSeeker(@RequestBody JobSeekerDTO jobSeekerDTO) {
+        JobSeeker jobSeeker = userService.createJobSeeker(jobSeekerDTO);
+        return ResponseEntity.ok(jobSeeker);
+    }
 
-
+    @PostMapping("/enterprises")
+    public ResponseEntity<User> createEnterprise(@RequestBody User user) {
+        User savedUser = userService.createEnterprise(user);
+        return ResponseEntity.ok(savedUser);
+    }
 }
 

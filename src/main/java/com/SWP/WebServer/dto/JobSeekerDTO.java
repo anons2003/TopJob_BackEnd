@@ -7,4 +7,5 @@ public class JobSeekerDTO {
     private String userName;
     private String password;
     private String email;
+    private int userRoleId;
 }

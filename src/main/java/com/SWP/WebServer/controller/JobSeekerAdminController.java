@@ -1,7 +1,5 @@
 package com.SWP.WebServer.controller;
 
-import com.SWP.WebServer.dto.JobSeekerDTO;
-import com.SWP.WebServer.dto.UserDTO;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.service.JobSeekerService;
@@ -60,13 +58,4 @@ public class JobSeekerAdminController {
        }
    }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
-        try {
-            User createdUser = userService.createUser(userDTO);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Failed to create user", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
