@@ -6,6 +6,8 @@ import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.JobSeekerRepository;
+import com.SWP.WebServer.repository.RoleTypeRepository;
+import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.service.Impl.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,10 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleTypeRepository roleTypeRepository;
     @Override
     public JobSeeker getUserProfile(String userId) {
         return jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
@@ -40,6 +45,8 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     public Optional<JobSeeker> getJobSeekerById(int id) {
         return jobSeekerRepository.findById(id);
     }
+
+
 
     @Override
     public JobSeeker updateInfo(UpdateInfoDTO body, String userId) {
@@ -136,4 +143,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
         jobSeekerRepository.save(user);
     }
+
+
+
 }

@@ -1,8 +1,6 @@
 package com.SWP.WebServer.controller;
 
-import com.SWP.WebServer.dto.AppliedCVDto;
-import com.SWP.WebServer.dto.ContactInfoDto;
-import com.SWP.WebServer.dto.UpdateInfoDTO;
+import com.SWP.WebServer.dto.*;
 import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
@@ -32,7 +30,6 @@ public class JobSeekerController {
     private final JobSeekerRepository jobSeekerRepository;
     private UserService userService;
     private JobSeekerService jobSeekerService;
-
     @Autowired
     private BookmarkService bookmarkService;
 
@@ -253,6 +250,4 @@ public class JobSeekerController {
 
         return ResponseEntity.ok(message);
     }
-
-
 }

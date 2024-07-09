@@ -241,5 +241,31 @@ public class UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+    @Transactional
+    public User createUser(UserDTO userDTO) {
+        // Determine role type based on userRoleId
+        RoleType roleType = determineRoleType(userDTO.getUserRoleId());
 
+        // Create User entity
+        User user = new User();
+        user.setUser_name(userDTO.getUserName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        user.setRoleType(roleType);
+
+        // Save User entity to database
+        user = userRepository.save(user);
+
+        return user;
+    }
+
+    private RoleType determineRoleType(Integer userRoleId) {
+        if (userRoleId == null || userRoleId == 1) {
+            return roleTypeRepository.findById(1).orElseThrow(() -> new RuntimeException("Job Seeker role not found"));
+        } else if (userRoleId == 2) {
+            return roleTypeRepository.findById(2).orElseThrow(() -> new RuntimeException("Enterprise role not found"));
+        } else {
+            throw new IllegalArgumentException("Invalid user role ID");
+        }
+    }
 }

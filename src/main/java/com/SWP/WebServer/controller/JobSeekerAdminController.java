@@ -1,6 +1,7 @@
 package com.SWP.WebServer.controller;
 
-import com.SWP.WebServer.dto.ToggleActiveDTO;
+import com.SWP.WebServer.dto.JobSeekerDTO;
+import com.SWP.WebServer.dto.UserDTO;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.service.JobSeekerService;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,4 +59,14 @@ public class JobSeekerAdminController {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job seeker not found.");
        }
    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        try {
+            User createdUser = userService.createUser(userDTO);
+            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to create user", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

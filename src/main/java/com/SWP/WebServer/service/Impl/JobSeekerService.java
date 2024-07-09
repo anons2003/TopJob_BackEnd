@@ -34,4 +34,6 @@ public interface JobSeekerService {
 
     List<JobSeeker> getAllJobSeekers();
     Optional<JobSeeker> getJobSeekerById(int id);
+
+
 }
