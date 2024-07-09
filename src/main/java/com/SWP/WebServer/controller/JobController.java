@@ -12,42 +12,43 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
-
-    private final JobPostService jobPostService;
-
     @Autowired
-    public JobController(JobPostService jobPostService) {
-        this.jobPostService = jobPostService;
-    }
+    private JobPostService jobPostService;
 
-    // get jobs
-    @GetMapping("/getjobs")
-    public ResponseEntity<?> getAllJobs() {
-        List<Job> jobs = jobPostService.getAllJobs();
-        return ResponseEntity.ok(jobs);
-    }
-
-    // Lưu một bài đăng công việc
     @PostMapping("/save")
-    public ResponseEntity<Job> saveJob(@RequestBody Job job) {
-        Job savedJob = jobPostService.saveJob(job);
-        return ResponseEntity.ok().body(savedJob);
+    public Job saveJob(@RequestBody Job job) {
+        return jobPostService.saveJob(job);
     }
 
-    // API để đếm tổng số bài đăng công việc
-    @GetMapping("/totalJob")
-    public ResponseEntity<Long> countJobs() {
-        long totalJobs = jobPostService.countJobs();
-        return ResponseEntity.ok().body(totalJobs);
+    @GetMapping("/count")
+    public long countJobs() {
+        return jobPostService.countJobs();
     }
-    @GetMapping("/list")
-    public ResponseEntity<List<Job>> getAllJobsAdmin() {
-        List<Job> jobs = jobPostService.getAllJobs();
-        return ResponseEntity.ok().body(jobs);
+
+    @GetMapping("/all")
+    public List<Job> getAllJobs() {
+        return jobPostService.getAllJobs();
     }
-    @GetMapping("/view/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         Optional<Job> job = jobPostService.getJobById(id);
-        return job.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return job.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job jobDetails) {
+        try {
+            Job updatedJob = jobPostService.updateJob(id, jobDetails);
+            return ResponseEntity.ok(updatedJob);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
+        jobPostService.deleteJob(id);
+        return ResponseEntity.ok().build();
     }
 }

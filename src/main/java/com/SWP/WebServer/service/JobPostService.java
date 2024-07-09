@@ -1,4 +1,3 @@
-// JobService.java
 package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.entity.Job;
@@ -15,24 +14,56 @@ public class JobPostService {
     @Autowired
     private JobPostRepository jobPostRepository;
 
-
-    // Phương thức lưu một bài đăng công việc
+    // Save a job post
     public Job saveJob(Job job) {
         return jobPostRepository.save(job);
     }
 
-    // Phương thức đếm tổng số bài đăng công việc
+    // Count total job posts
     public long countJobs() {
         return jobPostRepository.count();
-
     }
-    // Lấy danh sách công việc
+
+    // Get all job posts
     public List<Job> getAllJobs() {
         return jobPostRepository.findAll();
     }
-    // Tìm công việc bằng ID
+
+    // Find a job post by ID
     public Optional<Job> getJobById(Long id) {
-        // Triển khai logic tìm công việc theo ID từ cơ sở dữ liệu
         return jobPostRepository.findById(id);
+    }
+
+    // Update a job post
+    public Job updateJob(Long id, Job jobDetails) {
+        Optional<Job> jobOptional = jobPostRepository.findById(id);
+
+        if (jobOptional.isPresent()) {
+            Job job = jobOptional.get();
+            job.setTitle(jobDetails.getTitle());
+            job.setDescription(jobDetails.getDescription());
+            job.setJobType(jobDetails.getJobType());
+            job.setJobCategory(jobDetails.getJobCategory());
+            job.setSalaryType(jobDetails.getSalaryType());
+            job.setMinSalary(jobDetails.getMinSalary());
+            job.setMaxSalary(jobDetails.getMaxSalary());
+            job.setSkills(jobDetails.getSkills());
+            job.setQualifications(jobDetails.getQualifications());
+            job.setExperience(jobDetails.getExperience());
+            job.setIndustry(jobDetails.getIndustry());
+            job.setAddress(jobDetails.getAddress());
+            job.setCountry(jobDetails.getCountry());
+            job.setState(jobDetails.getState());
+            job.setUpdatedAt(jobDetails.getUpdatedAt());
+
+            return jobPostRepository.save(job);
+        } else {
+            throw new RuntimeException("Job not found with id " + id);
+        }
+    }
+
+    // Delete a job post
+    public void deleteJob(Long id) {
+        jobPostRepository.deleteById(id);
     }
 }

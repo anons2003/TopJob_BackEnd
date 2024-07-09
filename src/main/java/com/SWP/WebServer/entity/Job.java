@@ -1,6 +1,5 @@
 package com.SWP.WebServer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,14 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Job")
+@Entity
 @Table(name = "jobs")
 public class Job {
 
@@ -25,7 +22,6 @@ public class Job {
     private Long id;
 
     private String title;
-
 
     @Lob
     private String description;
@@ -58,15 +54,9 @@ public class Job {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    
-    // Getters and setters
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name="posted_eid",
-            referencedColumnName = "eid"
-    )
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="posted_eid", referencedColumnName = "eid")
     private Enterprise enterprise;
 
     @PrePersist
@@ -80,28 +70,7 @@ public class Job {
         updatedAt = LocalDateTime.now();
     }
 
-    //Thai Son
-
-    //Old Hibernate ManyToMany Relationship
-//    @JsonIgnoreProperties("bookmarkedJobs")
-//    @ManyToMany
-//    @JoinTable(
-//            name = "job_seeker_job_map",
-//            joinColumns = @JoinColumn(
-//                    name = "job_id",
-//                    referencedColumnName = "id"
-//            )
-//            ,
-//            inverseJoinColumns =@JoinColumn(
-//                    name = "job_seeker_id",
-//                    referencedColumnName = "jid"
-//            )
-//    )
-//    private List<JobSeeker> jobSeekers;
-
-    //New One
     @JsonIgnoreProperties("jobId")
     @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
-
 }
