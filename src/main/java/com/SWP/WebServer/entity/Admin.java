@@ -34,9 +34,15 @@ public class Admin {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "role_type_id")
-    private RoleType roleType;
+    //
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "userId",
+            referencedColumnName = "uid"
+    )
+    private User user;
 
     // getters and setters
 }

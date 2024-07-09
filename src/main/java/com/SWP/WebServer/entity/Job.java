@@ -1,6 +1,5 @@
 package com.SWP.WebServer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,9 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -26,15 +23,14 @@ public class Job {
 
     private String title;
 
-
     @Lob
     private String description;
 
-    @Column(name = "job_type")
-    private int jobType;
-
-    @Column(name = "job_category")
-    private int jobCategory;
+//    @Column(name = "job_type", insertable = false, updatable = false)
+//    private Integer jobType;
+//
+//    @Column(name = "job_category", insertable = false, updatable = false)
+//    private Integer jobCategory;
 
     @Column(name = "salary_type")
     private String salaryType;
@@ -58,15 +54,12 @@ public class Job {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    
-    // Getters and setters
-    @ManyToOne(
-            cascade = CascadeType.ALL
-    )
-    @JoinColumn(
-            name="posted_eid",
-            referencedColumnName = "eid"
-    )
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "posted_eid", referencedColumnName = "eid")
     private Enterprise enterprise;
 
     @PrePersist
@@ -80,26 +73,28 @@ public class Job {
         updatedAt = LocalDateTime.now();
     }
 
-    //Thai Son
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "job_type", referencedColumnName = "job_type_id")
+    @JsonIgnoreProperties("jobList")
+    private JobType jobTypeEntity;
 
-    //Old Hibernate ManyToMany Relationship
-//    @JsonIgnoreProperties("bookmarkedJobs")
-//    @ManyToMany
-//    @JoinTable(
-//            name = "job_seeker_job_map",
-//            joinColumns = @JoinColumn(
-//                    name = "job_id",
-//                    referencedColumnName = "id"
-//            )
-//            ,
-//            inverseJoinColumns =@JoinColumn(
-//                    name = "job_seeker_id",
-//                    referencedColumnName = "jid"
-//            )
-//    )
-//    private List<JobSeeker> jobSeekers;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "job_category", referencedColumnName = "job_category_id") // Đảm bảo khớp với thuộc tính trong JobCategory
+    @JsonIgnoreProperties("jobList")
+    private JobCategory jobCategoryEntity;
 
-    //New One
+
+    // Uncomment and use these if you have JobType and JobCategory entities
+    // @ManyToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "job_type", referencedColumnName = "jobTypeId")
+    // @JsonIgnoreProperties("jobList")
+    // private JobType jobTypeEntity;
+
+    // @ManyToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "job_category", referencedColumnName = "jobcategoryId")
+    // @JsonIgnoreProperties("jobList")
+    // private JobCategory jobCategoryEntity;
+
     @JsonIgnoreProperties("jobId")
     @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;

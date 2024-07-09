@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Integer> {
     Enterprise findByEid(int e_id);
+    Enterprise findByUser_Uid(int user_id);
 }
