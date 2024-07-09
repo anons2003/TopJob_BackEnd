@@ -24,7 +24,6 @@ public class JobPostService {
     // Phương thức đếm tổng số bài đăng công việc
     public long countJobs() {
         return jobPostRepository.count();
-
     }
     // Lấy danh sách công việc
     public List<Job> getAllJobs() {

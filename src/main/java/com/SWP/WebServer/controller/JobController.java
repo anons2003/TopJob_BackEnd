@@ -40,6 +40,7 @@ public class JobController {
         long totalJobs = jobPostService.countJobs();
         return ResponseEntity.ok().body(totalJobs);
     }
+
     @GetMapping("/list")
     public ResponseEntity<List<Job>> getAllJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs();

@@ -27,7 +27,7 @@ public class AdminService {
     }
 
     public Admin saveAdmin(Admin admin) {
-        // Additional logic can be added here if needed before saving
+
         return adminRepository.save(admin);
     }
 

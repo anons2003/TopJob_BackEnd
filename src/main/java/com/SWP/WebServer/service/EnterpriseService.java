@@ -29,4 +29,12 @@ public class EnterpriseService {
     public Enterprise saveEnterprise(Enterprise enterprise) {
         return enterpriseRepository.save(enterprise);
     }
+
+    public Enterprise getUserProfile(String userId) {
+        return enterpriseRepository.findByUser_Uid(Integer.parseInt(userId));
+    }
+
+    public Enterprise getProfileByEid(int userId) {
+        return enterpriseRepository.findByEid(userId);
+    }
 }
