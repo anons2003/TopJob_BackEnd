@@ -17,6 +17,7 @@ import com.SWP.WebServer.token.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -143,4 +144,7 @@ public class UserController {
         long totalUsers = userService.countUsers();
         return ResponseEntity.ok().body(totalUsers);
     }
+
+
 }
+

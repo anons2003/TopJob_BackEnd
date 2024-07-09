@@ -16,19 +16,17 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/jobs")
-public class JobController {
+public class JobPostController {
 
     private final JobPostService jobPostService;
     private final JobRepository jobRepository;
-    private final JobPostService jobService;
 
 
 
     @Autowired
-    public JobController(JobPostService jobPostService, JobRepository jobRepository, JobPostService jobService) {
+    public JobPostController(JobPostService jobPostService, JobRepository jobRepository) {
         this.jobPostService = jobPostService;
         this.jobRepository = jobRepository;
-        this.jobService = jobService;
     }
 
     // get jobs
@@ -75,7 +73,7 @@ public class JobController {
     @PatchMapping("/toggle-active/{id}")
     public ResponseEntity<?> toggleActive(@PathVariable Long id) {
         try {
-            jobService.toggleActiveStatus(id);
+            jobPostService.toggleActiveStatus(id);
             return ResponseEntity.ok("Job active status updated successfully.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(404).body(e.getMessage());
