@@ -11,4 +11,4 @@ COPY . /app
 RUN chmod +x ./mvnw && ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
 
 # Specify the command to run your application
-CMD ["java", "-jar", "target/your-application.jar"]
+CMD ["java", "-jar", "target/WebServerSWP-0.0.1-SNAPSHOT.jar"]
