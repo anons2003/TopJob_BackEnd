@@ -30,9 +30,6 @@ public class Job {
     @Lob
     private String description;
 
-    @Column(name = "job_type")
-    private int jobType;
-
     @Column(name = "job_category")
     private int jobCategory;
 
@@ -84,22 +81,14 @@ public class Job {
 
     //Thai Son
 
-    //Old Hibernate ManyToMany Relationship
-//    @JsonIgnoreProperties("bookmarkedJobs")
-//    @ManyToMany
-//    @JoinTable(
-//            name = "job_seeker_job_map",
-//            joinColumns = @JoinColumn(
-//                    name = "job_id",
-//                    referencedColumnName = "id"
-//            )
-//            ,
-//            inverseJoinColumns =@JoinColumn(
-//                    name = "job_seeker_id",
-//                    referencedColumnName = "jid"
-//            )
-//    )
-//    private List<JobSeeker> jobSeekers;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "job_type_id",
+            referencedColumnName = "jobTypeId"
+    )
+    @JsonIgnoreProperties("jobList") // Ignore userList property of RoleType during serialization
+    private JobType jobType;
+
 
     //New One
     @JsonIgnoreProperties("jobId")

@@ -1,12 +1,10 @@
 package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.entity.JobSeeker;
-import com.SWP.WebServer.repository.JobRepository;
 import com.SWP.WebServer.repository.JobSeekerRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -41,12 +39,12 @@ public class EmailService {
                                       String email,
                                       String subject,
                                       String body) {
-        JobSeeker  jobSeeker = repository.findByJid(jid);
+        JobSeeker jobSeeker = repository.findByJid(jid);
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            mimeMessageHelper.setFrom("dvtson2004@gmail.com");
+            mimeMessageHelper.setFrom("tjobnoreplymail@gmail.com");
             mimeMessageHelper.setTo(jobSeeker.getUser().getEmail());
             mimeMessageHelper.setSubject(subject);
 

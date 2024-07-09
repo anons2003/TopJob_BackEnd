@@ -1,6 +1,7 @@
 package com.SWP.WebServer.repository;
 
 import com.SWP.WebServer.entity.Admin;
+import com.SWP.WebServer.entity.Enterprise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
