@@ -26,12 +26,13 @@ public interface JobSeekerService {
             String userId);
 
 
-    Job  getBookmarks(String userId);
+    Job getBookmarks(String userId);
 
     JobSeeker getUserProfile(String userId);
 
     JobSeeker getUserProfileByJid(int userId);
 
     List<JobSeeker> getAllJobSeekers();
+
     Optional<JobSeeker> getJobSeekerById(int id);
 }

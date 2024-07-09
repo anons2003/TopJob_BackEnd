@@ -22,7 +22,7 @@ public class Enterprise {
     private String city;
     private String state;
     private String web_url;
-    private String resume_url;
+    private String employees;
     //
     private String headquarter;
     private String founded;
@@ -47,10 +47,10 @@ public class Enterprise {
         this.founder = "";
         this.founded = "";
         this.companyStory="";
-        this.avatar_url = "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg";
+        this.avatar_url = "https://res.cloudinary.com/dz9kynjwb/image/upload/v1717770585/OIP_bsmlku.jpg";
         this.created_at = new Date();
         this.updated_at = new Date();
-        this.resume_url = "";
+        this.employees = "";
         this.web_url = "";
         this.phone = "";
         this.city = "";

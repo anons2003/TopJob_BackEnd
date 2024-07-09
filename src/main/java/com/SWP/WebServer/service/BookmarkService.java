@@ -5,7 +5,7 @@ import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.repository.BookmarkRepository;
-import com.SWP.WebServer.repository.JobRepository;
+import com.SWP.WebServer.repository.JobPostRepository;
 import com.SWP.WebServer.repository.JobSeekerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookmarkService {
@@ -22,7 +21,7 @@ public class BookmarkService {
     private BookmarkRepository bookmarkRepository;
 
     @Autowired
-    private JobRepository jobRepository;
+    private JobPostRepository jobRepository;
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
