@@ -62,7 +62,11 @@ public class UserController {
 //        LoginResponse response = new LoginResponse(token, user.getRole());
 //        return response;
 //    }
-
+@PostMapping("/addUser")
+public ResponseEntity<User> signup(@RequestBody SignupDTO user) {
+    User newUser = userService.signup(user);
+    return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+}
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO body) {
         userService.resetPassword(body);
