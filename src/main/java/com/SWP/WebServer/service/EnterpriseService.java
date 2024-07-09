@@ -1,6 +1,7 @@
 package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.entity.Enterprise;
+import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.repository.EnterpriseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,17 @@ public class EnterpriseService {
 
     public Enterprise getProfileByEid(int userId) {
         return enterpriseRepository.findByEid(userId);
+    }
+
+    public void toggleActiveStatus(int id) {
+        Optional<Enterprise> optionalEnterprise = enterpriseRepository.findById(id);
+        if (optionalEnterprise.isPresent()) {
+            Enterprise enterprise = optionalEnterprise.get();
+            User user = enterprise.getUser();
+            user.setActive(!user.isActive());
+            enterpriseRepository.save(enterprise);
+        } else {
+            throw new IllegalArgumentException("Enterprise not found with ID: " + id);
+        }
     }
 }

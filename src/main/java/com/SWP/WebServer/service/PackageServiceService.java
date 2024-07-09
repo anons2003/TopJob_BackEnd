@@ -24,7 +24,7 @@ public class PackageServiceService {
                 .collect(Collectors.toList());
     }
 
-    public PackageServiceDTO getPackageById(Long id) {
+    public PackageServiceDTO getPackageById(int id) {
         Optional<PackageService> packageOptional = packageServiceRepository.findById(id);
         return packageOptional.map(this::convertToDTO).orElse(null);
     }
@@ -35,12 +35,24 @@ public class PackageServiceService {
         return convertToDTO(savedPackage);
     }
 
-    public void deletePackage(Long id) {
+    public void deletePackage(int id) {
         packageServiceRepository.deleteById(id);
     }
 
     public long countPackages() {
         return packageServiceRepository.count();
+    }
+
+    public Optional<PackageServiceDTO> updatePackage(int id, PackageServiceDTO packageServiceDTO) {
+        Optional<PackageService> existingPackage = packageServiceRepository.findById(id);
+        if (existingPackage.isPresent()) {
+            PackageService packageService = existingPackage.get();
+            BeanUtils.copyProperties(packageServiceDTO, packageService);
+            PackageService updatedPackage = packageServiceRepository.save(packageService);
+            return Optional.of(convertToDTO(updatedPackage));
+        } else {
+            return Optional.empty();
+        }
     }
 
     // Helper method to convert Entity to DTO
@@ -56,5 +68,4 @@ public class PackageServiceService {
         BeanUtils.copyProperties(packageServiceDTO, packageService);
         return packageService;
     }
-
 }

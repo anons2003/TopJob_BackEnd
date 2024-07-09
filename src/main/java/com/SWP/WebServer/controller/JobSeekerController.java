@@ -77,33 +77,35 @@ public class JobSeekerController {
             @RequestHeader("Authorization") String token) throws IOException {
         String userId = getUserIdFromToken(token);
 
-
         JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
         return ResponseEntity.ok(updatedUser);
     }
-//@PatchMapping("/update-info")
-//public ResponseEntity<?> updateUserInfo(
-//        @RequestPart("updateInfoDTO") String updateInfoDTOJson,
-//        @RequestPart(value = "resume", required = false) MultipartFile resume,
-//        @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
-//        @RequestHeader("Authorization") String token) throws IOException {
-//    String userId = getUserIdFromToken(token);
-//
-//    // Convert JSON string to UpdateInfoDTO object
-//    ObjectMapper objectMapper = new ObjectMapper();
-//    UpdateInfoDTO updateInfoDTO = objectMapper.readValue(updateInfoDTOJson, UpdateInfoDTO.class);
-//
-//    if (resume != null && !resume.isEmpty()) {
-//        String originalFilename = resume.getOriginalFilename();
-//        String publicId = originalFilename != null ? originalFilename.split("\\.")[0] : "";
-//        Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
-//        String url = (String) data.get("url");
-//        updateInfoDTO.setResume_url(url);
-//    }
-//
-//    JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
-//    return ResponseEntity.ok(updatedUser);
-//}
+    // @PatchMapping("/update-info")
+    // public ResponseEntity<?> updateUserInfo(
+    // @RequestPart("updateInfoDTO") String updateInfoDTOJson,
+    // @RequestPart(value = "resume", required = false) MultipartFile resume,
+    // @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
+    // @RequestHeader("Authorization") String token) throws IOException {
+    // String userId = getUserIdFromToken(token);
+    //
+    // // Convert JSON string to UpdateInfoDTO object
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // UpdateInfoDTO updateInfoDTO = objectMapper.readValue(updateInfoDTOJson,
+    // UpdateInfoDTO.class);
+    //
+    // if (resume != null && !resume.isEmpty()) {
+    // String originalFilename = resume.getOriginalFilename();
+    // String publicId = originalFilename != null ? originalFilename.split("\\.")[0]
+    // : "";
+    // Map<String, Object> data = cloudinaryService.upload(resume, publicId,
+    // folder);
+    // String url = (String) data.get("url");
+    // updateInfoDTO.setResume_url(url);
+    // }
+    //
+    // JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
+    // return ResponseEntity.ok(updatedUser);
+    // }
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(
@@ -130,7 +132,6 @@ public class JobSeekerController {
         return ResponseEntity.ok("Update contact successfully");
     }
 
-
     @PatchMapping("/update-resume")
     public ResponseEntity<?> updateResume(
             @RequestParam(value = "resume", required = false) MultipartFile resume,
@@ -147,13 +148,13 @@ public class JobSeekerController {
         return ResponseEntity.ok("Update resume successfully");
     }
 
-
-//    @GetMapping("bookmarks")
-//    public  ResponseEntity<?> bookmarkJob(@RequestHeader("Authorization") String token){
-//        String userId = getUserIdFromToken(token);
-//        Job job = jobSeekerService.getBookmarks(userId);
-//
-//    }
+    // @GetMapping("bookmarks")
+    // public ResponseEntity<?> bookmarkJob(@RequestHeader("Authorization") String
+    // token){
+    // String userId = getUserIdFromToken(token);
+    // Job job = jobSeekerService.getBookmarks(userId);
+    //
+    // }
 
     @PostMapping("/job/{jobId}")
     public ResponseEntity<Job> bookmarkJob(@RequestHeader("Authorization") String token, @PathVariable Long jobId) {
@@ -169,7 +170,6 @@ public class JobSeekerController {
         return ResponseEntity.ok(message);
     }
 
-
     @GetMapping("/bookmarks")
     public ResponseEntity<?> getBookmarkedJobs(@RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
@@ -179,8 +179,8 @@ public class JobSeekerController {
 
     @PostMapping("/apply-cv/{eid}")
     public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
-                                         @RequestHeader("Authorization") String token,
-                                         @PathVariable("eid") int eid) {
+            @RequestHeader("Authorization") String token,
+            @PathVariable("eid") int eid) {
         String userId = getUserIdFromToken(token);
         CVApply cvApply = cvService.applyCV(body, userId, eid);
         return ResponseEntity.ok(cvApply);
@@ -204,11 +204,10 @@ public class JobSeekerController {
         return ResponseEntity.ok("Update resume successfully");
     }
 
-
     @PatchMapping("/reapply-cv/{eid}")
     public ResponseEntity<?> reApplyForJob(@RequestBody AppliedCVDto body,
-                                           @RequestHeader("Authorization") String token,
-                                           @PathVariable("eid") int eid) {
+            @RequestHeader("Authorization") String token,
+            @PathVariable("eid") int eid) {
         String userId = getUserIdFromToken(token);
         CVApply cvApply = cvService.reApplyCV(body, userId, eid);
         return ResponseEntity.ok(cvApply);
@@ -216,15 +215,14 @@ public class JobSeekerController {
 
     @DeleteMapping("/delete-cv/{eid}")
     public ResponseEntity<?> deleteCV(@RequestHeader("Authorization") String token,
-                                      @PathVariable("eid") int eid) {
+            @PathVariable("eid") int eid) {
         String userId = getUserIdFromToken(token);
         String message = cvService.deleteCV(userId, eid);
         return ResponseEntity.ok(message);
     }
 
     @GetMapping("/get-cvs")
-    public ResponseEntity<?> GetAllCVByUserId(@RequestHeader("Authorization") String token
-    ) {
+    public ResponseEntity<?> GetAllCVByUserId(@RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
         List<CVApply> cvApplyList = cvService.GetAllCVByUserId(userId);
         return ResponseEntity.ok(cvApplyList);
@@ -240,11 +238,10 @@ public class JobSeekerController {
 
     @PostMapping("/send/{jid}")
     public ResponseEntity<?> sendEmailByJobseeker(@PathVariable("jid") int jid,
-                                                  @RequestParam("name") String name,
-                                                  @RequestParam("email") String email,
-                                                  @RequestParam("subject") String subject,
-                                                  @RequestParam("body") String body
-
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("subject") String subject,
+            @RequestParam("body") String body
 
     ) {
         String message = emailService.sendMailFromJobSeeker(jid, name, email, subject, body);

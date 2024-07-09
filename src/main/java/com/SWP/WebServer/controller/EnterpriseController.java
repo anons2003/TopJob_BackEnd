@@ -64,4 +64,13 @@ public class EnterpriseController {
         return enterprise.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @PatchMapping("/toggle-active/{id}")
+    public ResponseEntity<?> toggleActive(@PathVariable int id) {
+        try {
+            enterpriseService.toggleActiveStatus(id);
+            return ResponseEntity.ok("Enterprise active status updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
 }
