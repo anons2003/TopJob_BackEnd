@@ -32,6 +32,18 @@ public class JobPostController {
         return ResponseEntity.ok(jobs);
     }
 
+    //get job by id from url
+    @GetMapping("/getjobs/{jobId}")
+    public ResponseEntity<?> getJobByJobId(@PathVariable("jobId") Long jobId){
+        Optional<Job> job = jobPostService.findById(jobId);
+        return ResponseEntity.ok(job);
+    }
+
+//    @GetMapping("/getjobs/{jobId}")
+//    public ResponseEntity<?> getJobByJobId(@RequestParam("jobId") int jobId){
+//        Optional<Job> job = jobPostService.findById( Long.parseLong(String.valueOf(jobId)) );
+//        return ResponseEntity.ok(job);
+//    }
 
     // API để đếm tổng số bài đăng công việc
     @GetMapping("/totalJob")

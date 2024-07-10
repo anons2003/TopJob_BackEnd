@@ -83,4 +83,8 @@ public class JobPostService {
             throw new IllegalArgumentException("Job not found with ID: " + id);
         }
     }
+
+    public Optional<Job> findById(Long jobId) {
+        return  jobPostRepository.findById(jobId);
+    }
 }

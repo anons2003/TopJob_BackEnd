@@ -51,6 +51,7 @@ public class CVServiceImpl implements CVService {
         cvApply.setDescription(body.getDescription());
         cvApply.setIsApllied((byte) 0);
         cvApply.setUser(user);
+        cvApply.setResume_url(body.getResume_url());
         cvApply.setEnterprise(enterprise);
 
         return cvRepository.save(cvApply);
@@ -66,6 +67,7 @@ public class CVServiceImpl implements CVService {
         cvApply.setJob(body.getJob());
         cvApply.setJobType(body.getJobType());
         cvApply.setDescription(body.getDescription());
+        cvApply.setResume_url(body.getResume_url());
 
         return cvRepository.save(cvApply);
     }

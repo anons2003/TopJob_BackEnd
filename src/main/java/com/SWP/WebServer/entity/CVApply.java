@@ -20,6 +20,8 @@ public class CVApply {
     private String job;
     private String jobType;
     private String description;
+    //ditmeno hoa ra chua dat no la mediumtext:))
+    @Column(columnDefinition = "LONGTEXT")
     private String resume_url;
     private byte isApllied;
 
