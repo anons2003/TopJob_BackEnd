@@ -38,11 +38,7 @@ public class ResumeService {
         return resumeRepository.save(resume);
     }
 
-    public Resume createResume(int uId, String templateName, ResumeRequestDTO resumeRequestDTO) {
-        Resume newResume = buildResume(uId, templateName, resumeRequestDTO);
-        processLists(newResume, resumeRequestDTO);
-        return saveResume(newResume);
-    }
+
 
     public Resume updateResume(int uId, String templateName, ResumeRequestDTO resumeRequestDTO) {
         Resume existingResume = getResumeByUserIdAndTemplateName(uId, templateName);
@@ -59,14 +55,7 @@ public class ResumeService {
         resumeRepository.deleteById(id);
     }
 
-    private Resume buildResume(int uId, String templateName, ResumeRequestDTO resumeRequestDTO) {
-        Resume newResume = new Resume();
-        newResume.setUId(uId);
-        newResume.setTemplateName(templateName);
-        newResume.setTimeStamp(resumeRequestDTO.getTimeStamp());
-        updateResumeAttributes(newResume, resumeRequestDTO);
-        return newResume;
-    }
+
 
     private void updateResumeAttributes(Resume resume, ResumeRequestDTO resumeRequestDTO) {
         resume.setFullname(resumeRequestDTO.getFullname());

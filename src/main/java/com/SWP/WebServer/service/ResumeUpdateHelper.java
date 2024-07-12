@@ -63,12 +63,14 @@ public class ResumeUpdateHelper {
                     if (existingSkillMap.containsKey(skillDTO.getId())) {
                         skill = existingSkillMap.get(skillDTO.getId());
                         skill.setPercentage(skillDTO.getPercentage());
+                        skill.setTitle(skillDTO.getTitle());
                     } else {
                         skill = new Skill();
                         skill.setTitle(skillDTO.getTitle());
                         skill.setPercentage(skillDTO.getPercentage());
                         skill.setResume(resume); // Set the resume reference
                     }
+                    System.out.println("Mapped Skill: " + skill);
                     return skill;
                 })
                 .collect(Collectors.toList());
@@ -105,6 +107,7 @@ public class ResumeUpdateHelper {
                     if (existingEducationMap.containsKey(eduDTO.getId())) {
                         edu = existingEducationMap.get(eduDTO.getId());
                         edu.setUniversity(eduDTO.getUniversity());
+                        edu.setMajor(eduDTO.getMajor());
                     } else {
                         edu = new Education();
                         edu.setMajor(eduDTO.getMajor());
@@ -149,6 +152,7 @@ public class ResumeUpdateHelper {
                         exp.setYear(expDTO.getYear());
                         exp.setCompanyAndLocation(expDTO.getCompanyAndLocation());
                         exp.setDescription(expDTO.getDescription());
+                        exp.setTitle(expDTO.getTitle());
                     } else {
                         exp = new Experience();
                         exp.setYear(expDTO.getYear());

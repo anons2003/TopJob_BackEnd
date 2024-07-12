@@ -37,6 +37,12 @@ public class JobPostService {
 //    public Job saveJob(Job job) {
 //        return jobPostRepository.save(job);
 //    }
+
+    //get job theo tung enterpriseId
+    public List<Job> getJobsByEnterpriseId(int eid) {
+        return jobPostRepository.findByEnterprise_Eid(eid);
+    }
+
     public Job saveJob(Job job) {
         if (job.getJobTypeEntity() != null) {
             JobType jobType = jobTypeRepository.findById(job.getJobTypeEntity().getJobTypeId()).orElse(null);

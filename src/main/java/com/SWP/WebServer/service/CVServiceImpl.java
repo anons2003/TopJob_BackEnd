@@ -5,7 +5,7 @@ import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.Enterprise;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
-import com.SWP.WebServer.exception.DuplicateCVException;
+import com.SWP.WebServer.error.DuplicateCVException;
 import com.SWP.WebServer.repository.CVRepository;
 import com.SWP.WebServer.repository.EnterpriseRepository;
 import com.SWP.WebServer.repository.UserRepository;

@@ -33,6 +33,12 @@ public class JobController {
         List<JobDTO> jobDTOs = jobPostService.getAllJobDTOs();
         return ResponseEntity.ok().body(jobDTOs);
     }
+    //get job by id from url
+    @GetMapping("/getjobs/{jobId}")
+    public ResponseEntity<?> getJobByJobId(@PathVariable("jobId") Long jobId){
+        Optional<Job> job = jobPostService.getJobById(jobId);
+        return ResponseEntity.ok(job);
+    }
 
     // Lưu một bài đăng công việc
     @PostMapping("/save")
@@ -47,7 +53,7 @@ public class JobController {
         long totalJobs = jobPostService.countJobs();
         return ResponseEntity.ok().body(totalJobs);
     }
-
+    //list job ra theo active chua
     @GetMapping("/list")
     public ResponseEntity<List<Job>> getAllJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
@@ -55,7 +61,7 @@ public class JobController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(jobs);
     }
-
+    //lay job ra theo non-active
     @GetMapping("/inactive-list")
     public ResponseEntity<List<Job>> getAllInactiveJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
@@ -63,14 +69,14 @@ public class JobController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(jobs);
     }
-
+    //??
     @GetMapping("/view/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         Optional<Job> job = jobPostService.getJobById(id);
         return job.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-
+    //approve job
     @PatchMapping("/approval/{id}")
     public ResponseEntity<?> approveJob(@PathVariable Long id, @RequestBody Map<String, Boolean> approval) {
         boolean isActive = approval.get("isActive");
@@ -84,6 +90,7 @@ public class JobController {
             return ResponseEntity.status(404).body("Job not found.");
         }
     }
+    //active job
     @PatchMapping("/toggle-active/{id}")
     public ResponseEntity<?> toggleActive(@PathVariable Long id) {
         try {

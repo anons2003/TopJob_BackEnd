@@ -15,5 +15,6 @@ public class SkillDTO {
 
 
     public SkillDTO(Skill skill) {
+
     }
 }

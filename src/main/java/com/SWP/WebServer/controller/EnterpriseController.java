@@ -3,6 +3,7 @@ package com.SWP.WebServer.controller;
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoEnDTO;
 import com.SWP.WebServer.entity.Enterprise;
+import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.service.CloudinaryService;
 import com.SWP.WebServer.service.Impl.EnterpriseService;
@@ -131,7 +132,12 @@ public class EnterpriseController {
             return ResponseEntity.status(404).body(e.getMessage());
         }
     }
-
+    //get job theo eid rieng biet
+    @GetMapping("/jobs/{eid}")
+    public ResponseEntity<List<Job>> getJobsByEnterpriseId(@PathVariable int eid) {
+        List<Job> jobs = jobPostService.getJobsByEnterpriseId(eid);
+        return ResponseEntity.ok(jobs);
+    }
 //    // Lưu một bài đăng công việc
 //    @PostMapping("/save")
 //    public ResponseEntity<Job> saveJob(@RequestHeader("Authorization") String token,

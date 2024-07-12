@@ -6,6 +6,7 @@ import com.SWP.WebServer.entity.Enterprise;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.EnterpriseRepository;
+import com.SWP.WebServer.repository.JobPostRepository;
 import com.SWP.WebServer.service.Impl.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,14 @@ import java.util.regex.Pattern;
 public class EnterpriseServiceImpl implements EnterpriseService {
     @Autowired
     private EnterpriseRepository enterpriseRepository;
+    @Autowired
+    private JobPostRepository jobRepository;
 
     @Override
     public Enterprise getUserProfile(String userId) {
         return enterpriseRepository.findByUser_Uid(Integer.parseInt(userId));
     }
+
 
     @Override
     public Enterprise getUserProfileByEid(int userId) {
@@ -121,6 +125,7 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         enterprise.setAvatar_url(url);
         enterpriseRepository.save(enterprise);
     }
+
     public void toggleActiveStatus(int id) {
         Optional<Enterprise> optionalEnterprise = enterpriseRepository.findById(id);
         if (optionalEnterprise.isPresent()) {
