@@ -26,4 +26,12 @@ public class Blog {
     private LocalDateTime createdAt;
 
     // Getters and Setters
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
 }
