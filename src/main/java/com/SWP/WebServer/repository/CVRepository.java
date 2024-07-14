@@ -20,4 +20,7 @@ public interface CVRepository extends JpaRepository<CVApply, Integer> {
     CVApply findByUser_UidAndEnterprise_Eid(int userId,int eid);
     boolean existsByUserAndEnterprise(User user, Enterprise enterprise);
 
+    List<CVApply> findByEnterprise_Eid(int eid);
+
+
 }

@@ -150,12 +150,13 @@ public class JobSeekerController {
         return ResponseEntity.ok().body(bookmarkedJobs);
     }
 
-    @PostMapping("/apply-cv/{eid}")
+    @PostMapping("/apply-cv/{eid}/job/{jobId}")
     public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
                                          @RequestHeader("Authorization") String token,
-                                         @PathVariable("eid") int eid) {
+                                         @PathVariable("eid") int eid,
+                                         @PathVariable("jobId") Long jobId){
         String userId = getUserIdFromToken(token);
-        CVApply cvApply = cvService.applyCV(body, userId, eid);
+        CVApply cvApply = cvService.applyCV(body, userId, eid, jobId);
         return ResponseEntity.ok(cvApply);
     }
 

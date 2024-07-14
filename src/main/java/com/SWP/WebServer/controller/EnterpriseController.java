@@ -2,10 +2,12 @@ package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoEnDTO;
+import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.Enterprise;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.service.CloudinaryService;
+import com.SWP.WebServer.service.Impl.CVService;
 import com.SWP.WebServer.service.Impl.EnterpriseService;
 import com.SWP.WebServer.service.JobPostService;
 import com.SWP.WebServer.token.JwtTokenProvider;
@@ -33,6 +35,8 @@ public class EnterpriseController {
     CloudinaryService cloudinaryService;
     @Autowired
     private JobPostService jobPostService;
+    @Autowired
+    private CVService cvService;
 
     @Autowired
     public EnterpriseController(EnterpriseService enterpriseService) {
@@ -102,6 +106,32 @@ public class EnterpriseController {
         }
     }
 
+    @GetMapping("/get-cv-applied")
+    public ResponseEntity<?> getCvByUid(@RequestHeader("Authorization") String token) {
+        String userId = getUserIdFromToken(token);
+        List<CVApply> cvApplies = cvService.findCVByUid(userId);
+
+        return ResponseEntity.ok(cvApplies);
+    }
+
+    @PatchMapping("reject-cv/{uid}")// uid of jobSeeker
+    public ResponseEntity<?> rejectCV(@RequestHeader("Authorization") String token,
+                                      @PathVariable("uid") int uid) {
+        String enId = getUserIdFromToken(token);
+        String message = cvService.rejectCV(enId, uid);
+
+        return ResponseEntity.ok(message);
+    }
+
+    @PatchMapping("accept-cv/{uid}")// uid of jobSeeker
+    public ResponseEntity<?> acceptCV(@RequestHeader("Authorization") String token,
+                                      @PathVariable("uid") int uid) {
+        String enId = getUserIdFromToken(token);
+        String message = cvService.acceptCV(enId, uid);
+
+        return ResponseEntity.ok(message);
+    }
+
     @PatchMapping("/update-contact-info")
     public ResponseEntity<?> updateContactInfo(
             @RequestBody ContactInfoDto body,
@@ -132,12 +162,24 @@ public class EnterpriseController {
             return ResponseEntity.status(404).body(e.getMessage());
         }
     }
+
     //get job theo eid rieng biet
     @GetMapping("/jobs/{eid}")
     public ResponseEntity<List<Job>> getJobsByEnterpriseId(@PathVariable int eid) {
         List<Job> jobs = jobPostService.getJobsByEnterpriseId(eid);
         return ResponseEntity.ok(jobs);
     }
+
+    //revert to base condition
+    @PatchMapping("revert-cv/{uid}")// uid of jobSeeker
+    public ResponseEntity<?> revertCV(@RequestHeader("Authorization") String token,
+                                      @PathVariable("uid") int uid) {
+        String enId = getUserIdFromToken(token);
+        String message = cvService.revertCV(enId, uid);
+
+        return ResponseEntity.ok(message);
+    }
+
 //    // Lưu một bài đăng công việc
 //    @PostMapping("/save")
 //    public ResponseEntity<Job> saveJob(@RequestHeader("Authorization") String token,

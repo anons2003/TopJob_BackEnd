@@ -130,4 +130,7 @@ public class JobPostService {
             throw new IllegalArgumentException("Job not found with ID: " + id);
         }
     }
+    public List <Job> findJobsByUid(String eid){
+        return jobPostRepository.findByEnterprise_User_Uid(Integer.parseInt(eid));
+    }
 }

@@ -1,10 +1,11 @@
 package com.SWP.WebServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+@JsonIgnoreProperties({ "jobId"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,8 +21,9 @@ public class CVApply {
     private String job;
     private String jobType;
     private String description;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String resume_url;
-    private byte isApllied;
+    private int isApllied;
 
     @ManyToOne(
             cascade = CascadeType.PERSIST
@@ -41,4 +43,17 @@ public class CVApply {
             referencedColumnName = "eid"
     )
     private Enterprise enterprise;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+
+    @JoinColumn(
+            name = "jobId",
+            referencedColumnName = "id"
+    )
+    @JsonIgnoreProperties({"cvApplies"})
+    private Job jobId;
+
+
 }

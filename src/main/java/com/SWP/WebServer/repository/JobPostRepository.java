@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface JobPostRepository extends JpaRepository<Job, Long> {
     List<Job> findByEnterprise_Eid(int eid);
+
+    List<Job> findByEnterprise_User_Uid(int i);
 }

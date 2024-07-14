@@ -83,20 +83,13 @@ public class Job {
     @JsonIgnoreProperties("jobList")
     private JobCategory jobCategoryEntity;
 
-
-    // Uncomment and use these if you have JobType and JobCategory entities
-    // @ManyToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "job_type", referencedColumnName = "jobTypeId")
-    // @JsonIgnoreProperties("jobList")
-    // private JobType jobTypeEntity;
-
-    // @ManyToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "job_category", referencedColumnName = "jobcategoryId")
-    // @JsonIgnoreProperties("jobList")
-    // private JobCategory jobCategoryEntity;
-
     @JsonIgnoreProperties("jobId")
     @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
+
+    @JsonIgnoreProperties({"jobId","user","enterprise"})
+    @OneToMany(mappedBy = "jobId",fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CVApply> cvApplies;
+
 
 }

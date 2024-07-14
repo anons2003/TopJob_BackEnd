@@ -28,6 +28,7 @@ JobSeeker {
     private String city;
     private String state;
     private String web_url;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String resume_url;
     //
     private String first_name;
