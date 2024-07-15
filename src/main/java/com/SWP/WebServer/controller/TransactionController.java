@@ -91,5 +91,12 @@ public class TransactionController {
         List<MonthlyIncomeDTO> monthlyIncome = transactionService.getMonthlyIncome(year);
         return ResponseEntity.ok(monthlyIncome);
     }
+    @GetMapping("/monthly-income-jobseeker")
+    public List<MonthlyIncomeDTO> getMonthlyIncomeByUserIdAndYear(
+            @RequestParam("userId") Long userId,
+            @RequestParam("year") int year) {
+        return transactionService.getMonthlyIncomeByUserIdAndYear(userId, year);
+    }
+
 
 }
