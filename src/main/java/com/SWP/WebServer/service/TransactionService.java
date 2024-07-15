@@ -1,5 +1,6 @@
 package com.SWP.WebServer.service;
 
+import com.SWP.WebServer.dto.MonthlyIncomeDTO;
 import com.SWP.WebServer.entity.Transaction;
 import com.SWP.WebServer.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,6 +107,22 @@ public class TransactionService {
         return totalRevenue;
     }
 
+    public List<MonthlyIncomeDTO> getMonthlyIncome(int year) {
+        List<MonthlyIncomeDTO> monthlyIncome = transactionRepository.findMonthlyIncomeByYear(year);
+
+        // Initialize list with 0 income for all months
+        List<MonthlyIncomeDTO> fullMonthlyIncome = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            fullMonthlyIncome.add(new MonthlyIncomeDTO(month, BigDecimal.ZERO));
+        }
+
+        // Update list with actual values
+        for (MonthlyIncomeDTO income : monthlyIncome) {
+            fullMonthlyIncome.set(income.getMonth() - 1, income);
+        }
+
+        return fullMonthlyIncome;
+    }
 
 
 

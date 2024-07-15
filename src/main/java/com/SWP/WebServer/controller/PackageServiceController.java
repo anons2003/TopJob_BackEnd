@@ -8,9 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/packages")
+@RequestMapping("/packageServices")
 public class PackageServiceController {
 
     @Autowired
@@ -23,7 +24,7 @@ public class PackageServiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PackageServiceDTO> getPackageById(@PathVariable("id") Long id) {
+    public ResponseEntity<PackageServiceDTO> getPackageById(@PathVariable("id") int id) {
         PackageServiceDTO packageService = packageServiceService.getPackageById(id);
         if (packageService != null) {
             return new ResponseEntity<>(packageService, HttpStatus.OK);
@@ -38,17 +39,30 @@ public class PackageServiceController {
         return new ResponseEntity<>(createdPackage, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePackage(@PathVariable("id") Long id) {
-        packageServiceService.deletePackage(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
     @GetMapping("/totalPackageService")
     public ResponseEntity<Long> countPackages() {
         long count = packageServiceService.countPackages();
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
+    @GetMapping("/list")
+    public ResponseEntity<List<PackageServiceDTO>> getAllPackagesList() {
+        List<PackageServiceDTO> packages = packageServiceService.getAllPackages();
+        return ResponseEntity.ok().body(packages);
+    }
 
-    // Các phương thức khác tùy theo yêu cầu
+    @PutMapping("/{id}")
+    public ResponseEntity<PackageServiceDTO> updatePackage(@PathVariable("id") int id, @RequestBody PackageServiceDTO packageServiceDTO) {
+        Optional<PackageServiceDTO> updatedPackage = packageServiceService.updatePackage(id, packageServiceDTO);
+        if (updatedPackage.isPresent()) {
+            return ResponseEntity.ok(updatedPackage.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePackage(@PathVariable("id") int id) {
+        packageServiceService.deletePackage(id);
+        return ResponseEntity.noContent().build();
+    }
 }
