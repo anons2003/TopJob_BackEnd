@@ -241,4 +241,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User findUserByUserID(String userId) {
+        return userRepository.findByUid(Integer.parseInt(userId));
+    }
 }
