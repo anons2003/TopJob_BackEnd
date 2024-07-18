@@ -28,6 +28,7 @@ JobSeeker {
     private String city;
     private String state;
     private String web_url;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String resume_url;
     //
     private String first_name;
@@ -62,7 +63,7 @@ JobSeeker {
 
     public JobSeeker(User user) {
         this.user = user;
-        this.avatar_url = "http://res.cloudinary.com/dswewjrly/image/upload/v1715831315/wmndhsmpxuihewekekzy.jpg";
+        this.avatar_url = "https://res.cloudinary.com/dz9kynjwb/image/upload/v1717770585/OIP_bsmlku.jpg";
         this.first_name = "";
         this.last_name = "";
         this.occupation = "";
@@ -76,6 +77,5 @@ JobSeeker {
         this.state = "";
 
     }
-
 
 }

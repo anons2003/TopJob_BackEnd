@@ -1,12 +1,15 @@
 package com.SWP.WebServer.controller;
 
-import com.SWP.WebServer.dto.*;
+import com.SWP.WebServer.dto.AppliedCVDto;
+import com.SWP.WebServer.dto.ContactInfoDto;
+import com.SWP.WebServer.dto.UpdateInfoDTO;
 import com.SWP.WebServer.entity.CVApply;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ApiRequestException;
-import com.SWP.WebServer.repository.JobSeekerRepository;
-import com.SWP.WebServer.service.*;
+import com.SWP.WebServer.service.BookmarkService;
+import com.SWP.WebServer.service.CloudinaryService;
+import com.SWP.WebServer.service.EmailService;
 import com.SWP.WebServer.service.Impl.CVService;
 import com.SWP.WebServer.service.Impl.JobSeekerService;
 import com.SWP.WebServer.token.JwtTokenProvider;
@@ -17,19 +20,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/jobSeeker")
 public class JobSeekerController {
     @Autowired
-    private final JobSeekerRepository jobSeekerRepository;
-    private UserService userService;
     private JobSeekerService jobSeekerService;
+
     @Autowired
     private BookmarkService bookmarkService;
 
@@ -45,8 +45,9 @@ public class JobSeekerController {
     @Autowired
     private EmailService emailService;
 
-    public JobSeekerController(JobSeekerRepository jobSeekerRepository) {
-        this.jobSeekerRepository = jobSeekerRepository;
+    @GetMapping("/list")
+    public List<JobSeeker> getAllJobSeekers() {
+        return jobSeekerService.getAllJobSeekers();
     }
 
     @GetMapping("/candidate-profile")
@@ -61,8 +62,9 @@ public class JobSeekerController {
         JobSeeker jobSeeker = jobSeekerService.getUserProfile(userId);
         return jobSeeker;
     }
+
     @GetMapping("/candidate-profile/{jid}")
-    public JobSeeker getProfileByJid(@PathVariable("jid" ) int userId) {
+    public JobSeeker getProfileByJid(@PathVariable("jid") int userId) {
 
         JobSeeker jobSeeker = jobSeekerService.getUserProfileByJid(userId);
         return jobSeeker;
@@ -79,29 +81,7 @@ public class JobSeekerController {
         JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
         return ResponseEntity.ok(updatedUser);
     }
-//@PatchMapping("/update-info")
-//public ResponseEntity<?> updateUserInfo(
-//        @RequestPart("updateInfoDTO") String updateInfoDTOJson,
-//        @RequestPart(value = "resume", required = false) MultipartFile resume,
-//        @RequestParam(value = "folder", defaultValue = "user_resume") String folder,
-//        @RequestHeader("Authorization") String token) throws IOException {
-//    String userId = getUserIdFromToken(token);
-//
-//    // Convert JSON string to UpdateInfoDTO object
-//    ObjectMapper objectMapper = new ObjectMapper();
-//    UpdateInfoDTO updateInfoDTO = objectMapper.readValue(updateInfoDTOJson, UpdateInfoDTO.class);
-//
-//    if (resume != null && !resume.isEmpty()) {
-//        String originalFilename = resume.getOriginalFilename();
-//        String publicId = originalFilename != null ? originalFilename.split("\\.")[0] : "";
-//        Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
-//        String url = (String) data.get("url");
-//        updateInfoDTO.setResume_url(url);
-//    }
-//
-//    JobSeeker updatedUser = jobSeekerService.updateInfo(updateInfoDTO, userId);
-//    return ResponseEntity.ok(updatedUser);
-//}
+
 
     @PatchMapping("/update-avatar")
     public ResponseEntity<?> updateAvatar(
@@ -146,12 +126,7 @@ public class JobSeekerController {
     }
 
 
-//    @GetMapping("bookmarks")
-//    public  ResponseEntity<?> bookmarkJob(@RequestHeader("Authorization") String token){
-//        String userId = getUserIdFromToken(token);
-//        Job job = jobSeekerService.getBookmarks(userId);
-//
-//    }
+
 
     @PostMapping("/job/{jobId}")
     public ResponseEntity<Job> bookmarkJob(@RequestHeader("Authorization") String token, @PathVariable Long jobId) {
@@ -168,7 +143,6 @@ public class JobSeekerController {
     }
 
 
-
     @GetMapping("/bookmarks")
     public ResponseEntity<?> getBookmarkedJobs(@RequestHeader("Authorization") String token) {
         String userId = getUserIdFromToken(token);
@@ -176,12 +150,13 @@ public class JobSeekerController {
         return ResponseEntity.ok().body(bookmarkedJobs);
     }
 
-    @PostMapping("/apply-cv/{eid}")
+    @PostMapping("/apply-cv/{eid}/job/{jobId}")
     public ResponseEntity<?> applyForJob(@RequestBody AppliedCVDto body,
                                          @RequestHeader("Authorization") String token,
-                                         @PathVariable("eid") int eid) {
+                                         @PathVariable("eid") int eid,
+                                         @PathVariable("jobId") Long jobId){
         String userId = getUserIdFromToken(token);
-        CVApply cvApply = cvService.applyCV(body, userId, eid);
+        CVApply cvApply = cvService.applyCV(body, userId, eid, jobId);
         return ResponseEntity.ok(cvApply);
     }
 
@@ -199,15 +174,15 @@ public class JobSeekerController {
         Map<String, Object> data = cloudinaryService.upload(resume, publicId, folder);
 
         String url = (String) data.get("url");
-        cvService.uploadResume(url, userId,eid);
+        cvService.uploadResume(url, userId, eid);
         return ResponseEntity.ok("Update resume successfully");
     }
 
 
     @PatchMapping("/reapply-cv/{eid}")
     public ResponseEntity<?> reApplyForJob(@RequestBody AppliedCVDto body,
-                                         @RequestHeader("Authorization") String token,
-                                         @PathVariable("eid") int eid) {
+                                           @RequestHeader("Authorization") String token,
+                                           @PathVariable("eid") int eid) {
         String userId = getUserIdFromToken(token);
         CVApply cvApply = cvService.reApplyCV(body, userId, eid);
         return ResponseEntity.ok(cvApply);
@@ -215,17 +190,17 @@ public class JobSeekerController {
 
     @DeleteMapping("/delete-cv/{eid}")
     public ResponseEntity<?> deleteCV(@RequestHeader("Authorization") String token,
-                                           @PathVariable("eid") int eid) {
+                                      @PathVariable("eid") int eid) {
         String userId = getUserIdFromToken(token);
-        String message =cvService.deleteCV(userId, eid);
+        String message = cvService.deleteCV(userId, eid);
         return ResponseEntity.ok(message);
     }
 
     @GetMapping("/get-cvs")
     public ResponseEntity<?> GetAllCVByUserId(@RequestHeader("Authorization") String token
-                                      ) {
+    ) {
         String userId = getUserIdFromToken(token);
-        List<CVApply> cvApplyList= cvService.GetAllCVByUserId(userId);
+        List<CVApply> cvApplyList = cvService.GetAllCVByUserId(userId);
         return ResponseEntity.ok(cvApplyList);
     }
 
@@ -238,16 +213,17 @@ public class JobSeekerController {
     }
 
     @PostMapping("/send/{jid}")
-    public ResponseEntity<?>  sendEmailByJobseeker(@PathVariable("jid") int jid,
-                                                   @RequestParam("name") String name,
-                                                   @RequestParam("email") String email,
-                                                   @RequestParam("subject") String subject,
-                                                   @RequestParam("body") String body
+    public ResponseEntity<?> sendEmailByJobseeker(@PathVariable("jid") int jid,
+                                                  @RequestParam("name") String name,
+                                                  @RequestParam("email") String email,
+                                                  @RequestParam("subject") String subject,
+                                                  @RequestParam("body") String body
 
 
-    ){
-        String message =emailService.sendMailFromJobSeeker(jid,name,email,subject,body);
+    ) {
+        String message = emailService.sendMailToJobSeeker(jid, name, email, subject, body);
 
         return ResponseEntity.ok(message);
     }
+
 }

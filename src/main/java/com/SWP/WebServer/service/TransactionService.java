@@ -123,7 +123,7 @@ public class TransactionService {
 
         return fullMonthlyIncome;
     }
-    public List<MonthlyIncomeDTO> getMonthlyIncomeByUserIdAndYear(Long userId, int year) {
-        return transactionRepository.findMonthlyTransactionsByUserIdAndYear(userId, year);
-    }
+
+
+
 }

@@ -43,19 +43,19 @@ public class JobSeekerAdminController {
             return ResponseEntity.notFound().build();
         }
     }
-   // lock
-   @PatchMapping("/toggle-active/{id}")
-   public ResponseEntity<?> toggleActive(@PathVariable int id) {
-       Optional<JobSeeker> optionalJobSeeker = jobSeekerRepository.findById(id);
-       if (optionalJobSeeker.isPresent()) {
-           JobSeeker jobSeeker = optionalJobSeeker.get();
-           User user = jobSeeker.getUser();
-           user.setActive(!user.isActive());
-           jobSeekerRepository.save(jobSeeker);
-           return ResponseEntity.ok("User active status updated successfully.");
-       } else {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job seeker not found.");
-       }
-   }
+    // lock
+    @PatchMapping("/toggle-active/{id}")
+    public ResponseEntity<?> toggleActive(@PathVariable int id) {
+        Optional<JobSeeker> optionalJobSeeker = jobSeekerRepository.findById(id);
+        if (optionalJobSeeker.isPresent()) {
+            JobSeeker jobSeeker = optionalJobSeeker.get();
+            User user = jobSeeker.getUser();
+            user.setActive(!user.isActive());
+            jobSeekerRepository.save(jobSeeker);
+            return ResponseEntity.ok("User active status updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job seeker not found.");
+        }
+    }
 
 }

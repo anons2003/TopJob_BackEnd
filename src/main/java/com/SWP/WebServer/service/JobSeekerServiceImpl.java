@@ -2,12 +2,11 @@ package com.SWP.WebServer.service;
 
 import com.SWP.WebServer.dto.ContactInfoDto;
 import com.SWP.WebServer.dto.UpdateInfoDTO;
+import com.SWP.WebServer.entity.Bookmark;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.exception.ResourceNotFoundException;
 import com.SWP.WebServer.repository.JobSeekerRepository;
-import com.SWP.WebServer.repository.RoleTypeRepository;
-import com.SWP.WebServer.repository.UserRepository;
 import com.SWP.WebServer.service.Impl.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleTypeRepository roleTypeRepository;
+
     @Override
     public JobSeeker getUserProfile(String userId) {
         return jobSeekerRepository.findByUser_Uid(Integer.parseInt(userId));
@@ -46,8 +42,6 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         return jobSeekerRepository.findById(id);
     }
 
-
-
     @Override
     public JobSeeker updateInfo(UpdateInfoDTO body, String userId) {
         int id = Integer.parseInt(userId);
@@ -58,7 +52,6 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         // Update user fields
         if (body.getCity() != null) user.setCity(body.getCity());
         if (body.getState() != null) user.setState(body.getState());
-
         if (body.getFirst_name() != null) user.setFirst_name(body.getFirst_name());
         if (body.getLast_name() != null) user.setLast_name(body.getLast_name());
         if (body.getUser_name() != null) user.getUser().setUser_name(body.getUser_name());
@@ -143,7 +136,4 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
         jobSeekerRepository.save(user);
     }
-
-
-
 }

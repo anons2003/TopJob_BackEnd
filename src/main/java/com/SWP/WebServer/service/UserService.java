@@ -218,7 +218,6 @@ public class UserService {
         return userRepository.count();
     }
 
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -242,28 +241,4 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public JobSeeker createJobSeeker(JobSeekerDTO jobSeekerDTO) {
-        RoleType roleType = roleTypeRepository.findById(jobSeekerDTO.getUserRoleId())
-                .orElseThrow(() -> new RuntimeException("RoleType not found"));
-
-        User user = new User(
-                jobSeekerDTO.getUserName(),
-                jobSeekerDTO.getEmail(),
-                jobSeekerDTO.getPassword(),
-                "", // assuming gid is not provided in DTO
-                0 // assuming is_verify_email is 0 by default
-        );
-        user.setRoleType(roleType);
-
-        User savedUser = userRepository.save(user);
-        JobSeeker jobSeeker = new JobSeeker(savedUser);
-        return jobSeekerRepository.save(jobSeeker);
-    }
-
-    public User createEnterprise(User user) {
-        RoleType roleType = roleTypeRepository.findById(2)
-                .orElseThrow(() -> new RuntimeException("RoleType not found"));
-        user.setRoleType(roleType);
-        return userRepository.save(user);
-    }
 }

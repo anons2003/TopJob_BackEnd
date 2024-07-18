@@ -40,11 +40,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
 
 
-    @Query("SELECT new com.SWP.WebServer.dto.MonthlyIncomeDTO(MONTH(t.transactionDate), SUM(t.amount)) " +
-            "FROM Transaction t " +
-            "WHERE YEAR(t.transactionDate) = :year " +
-            "AND t.userId = :userId " +
-            "GROUP BY MONTH(t.transactionDate)")
-    List<MonthlyIncomeDTO> findMonthlyTransactionsByUserIdAndYear(@Param("userId") Long userId, @Param("year") int year);
 
 }

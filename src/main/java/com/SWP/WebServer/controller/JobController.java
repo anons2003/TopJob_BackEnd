@@ -1,11 +1,10 @@
 package com.SWP.WebServer.controller;
 
-import com.SWP.WebServer.dto.PackageServiceDTO;
+import com.SWP.WebServer.dto.JobDTO;
 import com.SWP.WebServer.entity.Job;
-import com.SWP.WebServer.repository.JobRepository;
+import com.SWP.WebServer.repository.JobPostRepository;
 import com.SWP.WebServer.service.JobPostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,24 +15,29 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/jobs")
-public class JobPostController {
-
-    private final JobPostService jobPostService;
-    private final JobRepository jobRepository;
-
-
-
+public class JobController {
     @Autowired
-    public JobPostController(JobPostService jobPostService, JobRepository jobRepository) {
-        this.jobPostService = jobPostService;
-        this.jobRepository = jobRepository;
-    }
+    private JobPostService jobPostService;
+    @Autowired
+    private JobPostRepository jobRepository;
 
     // get jobs
-    @GetMapping("/getjobs")
+    @GetMapping("/getjob")
     public ResponseEntity<?> getAllJobs() {
         List<Job> jobs = jobPostService.getAllJobs();
         return ResponseEntity.ok(jobs);
+    }
+    //getjob2.0
+    @GetMapping("/getjobs")
+    public ResponseEntity<List<JobDTO>> getAllJobsDTO() {
+        List<JobDTO> jobDTOs = jobPostService.getAllJobDTOs();
+        return ResponseEntity.ok().body(jobDTOs);
+    }
+    //get job by id from url
+    @GetMapping("/getjobs/{jobId}")
+    public ResponseEntity<?> getJobByJobId(@PathVariable("jobId") Long jobId){
+        Optional<Job> job = jobPostService.getJobById(jobId);
+        return ResponseEntity.ok(job);
     }
 
     // Lưu một bài đăng công việc
@@ -49,6 +53,7 @@ public class JobPostController {
         long totalJobs = jobPostService.countJobs();
         return ResponseEntity.ok().body(totalJobs);
     }
+    //list job ra theo active chua
     @GetMapping("/list")
     public ResponseEntity<List<Job>> getAllJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
@@ -56,7 +61,7 @@ public class JobPostController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(jobs);
     }
-
+    //lay job ra theo non-active
     @GetMapping("/inactive-list")
     public ResponseEntity<List<Job>> getAllInactiveJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
@@ -64,22 +69,14 @@ public class JobPostController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(jobs);
     }
-
+    //??
     @GetMapping("/view/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         Optional<Job> job = jobPostService.getJobById(id);
         return job.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    @PatchMapping("/toggle-active/{id}")
-    public ResponseEntity<?> toggleActive(@PathVariable Long id) {
-        try {
-            jobPostService.toggleActiveStatus(id);
-            return ResponseEntity.ok("Job active status updated successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
-    }
 
+    //approve job
     @PatchMapping("/approval/{id}")
     public ResponseEntity<?> approveJob(@PathVariable Long id, @RequestBody Map<String, Boolean> approval) {
         boolean isActive = approval.get("isActive");
@@ -93,4 +90,15 @@ public class JobPostController {
             return ResponseEntity.status(404).body("Job not found.");
         }
     }
+    //active job
+    @PatchMapping("/toggle-active/{id}")
+    public ResponseEntity<?> toggleActive(@PathVariable Long id) {
+        try {
+            jobPostService.toggleActiveStatus(id);
+            return ResponseEntity.ok("Job active status updated successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
 }

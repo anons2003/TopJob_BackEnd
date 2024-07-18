@@ -1,54 +1,44 @@
 package com.SWP.WebServer.controller;
 
 import com.SWP.WebServer.dto.*;
-import com.SWP.WebServer.entity.CVApply;
-import com.SWP.WebServer.entity.JobSeeker;
 import com.SWP.WebServer.entity.RoleType;
 import com.SWP.WebServer.entity.User;
 import com.SWP.WebServer.exception.ApiRequestException;
-import com.SWP.WebServer.repository.RoleTypeRepository;
 import com.SWP.WebServer.response.LoginResponse;
-import com.SWP.WebServer.service.CloudinaryService;
-import com.SWP.WebServer.service.Impl.CVService;
-import com.SWP.WebServer.service.Impl.JobSeekerService;
-import com.SWP.WebServer.service.JobSeekerServiceImpl;
+import com.SWP.WebServer.service.RoleTypeService;
 import com.SWP.WebServer.service.UserService;
 import com.SWP.WebServer.token.JwtTokenProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 
 public class UserController {
     @Autowired
     UserService userService;
-    @Autowired
-    JobSeekerService jobSeekerService;
-    @Autowired
-    JobSeekerServiceImpl jobSeekerServiceimpl;
+
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
+
     @Autowired
-    CloudinaryService cloudinaryService;
-    @Autowired
-    RoleTypeRepository roleTypeRepository;
+    private RoleTypeService roleTypeService;
 
     @GetMapping("/usertypes")
     public List<RoleType> getAllUserTypes() {
-        return roleTypeRepository.findAll();
+        return roleTypeService.getAllUserTypesExcludingAdmin();
     }
 
+    @GetMapping("/users/list")
+    public List<User> getAllUser(){
+        return userService.getAllUsers();
+    }
 
     @PostMapping("/signup")
     public User create(@RequestBody SignupDTO body) {
@@ -62,11 +52,7 @@ public class UserController {
 //        LoginResponse response = new LoginResponse(token, user.getRole());
 //        return response;
 //    }
-@PostMapping("/addUser")
-public ResponseEntity<User> signup(@RequestBody SignupDTO user) {
-    User newUser = userService.signup(user);
-    return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-}
+
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO body) {
         userService.resetPassword(body);
@@ -148,16 +134,4 @@ public ResponseEntity<User> signup(@RequestBody SignupDTO user) {
         long totalUsers = userService.countUsers();
         return ResponseEntity.ok().body(totalUsers);
     }
-    @PostMapping("/job-seekers")
-    public ResponseEntity<JobSeeker> createJobSeeker(@RequestBody JobSeekerDTO jobSeekerDTO) {
-        JobSeeker jobSeeker = userService.createJobSeeker(jobSeekerDTO);
-        return ResponseEntity.ok(jobSeeker);
-    }
-
-    @PostMapping("/enterprises")
-    public ResponseEntity<User> createEnterprise(@RequestBody User user) {
-        User savedUser = userService.createEnterprise(user);
-        return ResponseEntity.ok(savedUser);
-    }
 }
-

@@ -1,17 +1,15 @@
 package com.SWP.WebServer.service;
 
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.SWP.WebServer.dto.TemplateDTO;
 import com.SWP.WebServer.entity.Template;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.repository.TemplateRepository;
+import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;

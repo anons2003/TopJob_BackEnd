@@ -10,7 +10,8 @@ public interface CVService {
     CVApply applyCV(
             AppliedCVDto body,
             String userId,
-            int eid);
+            int eid,
+            Long jobId);
 
     CVApply reApplyCV(AppliedCVDto body, String userId, int eid);
 
@@ -18,5 +19,13 @@ public interface CVService {
 
     List<CVApply> GetAllCVByUserId(String userId);
 
-    void uploadResume(String url, String userId,int eid);
+    void uploadResume(String url, String userId, int eid);
+
+    List<CVApply> findCVByUid(String userId);
+
+    String acceptCV(String enId, int cvId);
+
+    String rejectCV(String userId, int uid);
+
+    String revertCV(String enId, int uid);
 }

@@ -15,4 +15,3 @@ public class BlogDTO {
     private Boolean isActive;
     private LocalDateTime createdAt;
 }
-

@@ -3,9 +3,7 @@ package com.SWP.WebServer.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Date;
 
@@ -20,8 +18,6 @@ public class User {
     private int uid;
     private String gid;
 
-    @Setter
-    @Getter
     @Column(length = 16)
     private String user_name;
     private String email;
@@ -51,6 +47,7 @@ public class User {
         this.isActive = (byte) (active ? 1 : 0);
     }
 
+
     public User(String user_name, String email, String password, String gid, int is_verify_email) {
         this.user_name = user_name;
         this.email = email;
@@ -62,6 +59,5 @@ public class User {
         this.isActive = 1; // Active by default
         this.account_balance = 0;
     }
-
 
 }

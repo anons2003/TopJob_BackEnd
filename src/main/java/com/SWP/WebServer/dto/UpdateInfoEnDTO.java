@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateInfoEnDTO {
+    private String enterpriseName;
+    private String founded;
+    private String founder;
+    private String state;
     private String phone;
-    private String location;
-    private String en_position;
-    private String taxCode;
-
+    private String headquarter;
+    private String companyStory;
+    private String city;
+    private String employees;
 }
