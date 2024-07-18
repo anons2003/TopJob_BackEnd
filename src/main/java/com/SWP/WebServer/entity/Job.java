@@ -63,6 +63,10 @@ public class Job {
     @JoinColumn(name = "posted_eid", referencedColumnName = "eid")
     private Enterprise enterprise;
 
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

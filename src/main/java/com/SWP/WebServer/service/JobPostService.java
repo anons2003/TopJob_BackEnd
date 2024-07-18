@@ -138,4 +138,8 @@ public class JobPostService {
     public List<Job> findJobsByUid(String eid) {
         return jobPostRepository.findByEnterprise_User_Uid(Integer.parseInt(eid));
     }
+
+    public List<Job> getAllsJobs() {
+        return jobPostRepository.findAll();
+    }
 }
