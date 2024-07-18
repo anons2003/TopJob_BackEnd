@@ -53,7 +53,6 @@ public class JobController {
         long totalJobs = jobPostService.countJobs();
         return ResponseEntity.ok().body(totalJobs);
     }
-    //list job ra theo active chua
     @GetMapping("/list")
     public ResponseEntity<List<Job>> getAllJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
@@ -61,7 +60,7 @@ public class JobController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(jobs);
     }
-    //lay job ra theo non-active
+
     @GetMapping("/inactive-list")
     public ResponseEntity<List<Job>> getAllInactiveJobsAdmin() {
         List<Job> jobs = jobPostService.getAllJobs().stream()
