@@ -241,4 +241,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> getUsersByRoleId(int roleId) {
+        return (List<User>) userRepository.findByRoleType_RoleTypeId(roleId);
+    }
 }
