@@ -70,6 +70,10 @@ public class BlogController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+    @GetMapping("/totalBlog")
+    public ResponseEntity<Long> countBlogs() {
+        long count = blogService.countBlog();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 
 }
