@@ -17,4 +17,8 @@ public interface JobSeekerRepository extends JpaRepository<JobSeeker,Integer> {
 
     @Query("SELECT b.jobId FROM Bookmark b WHERE b.jobSeekers.user.uid = :user_id")
     List<Job> findAllBookmarks(@Param("user_id") int user_id);
+
+    @Query("SELECT js FROM JobSeeker js WHERE js.occupation = :categoryName")
+    List<JobSeeker> findJobSeekersByOccupation(@Param("categoryName") int categoryName);
+
 }

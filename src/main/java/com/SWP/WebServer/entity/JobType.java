@@ -1,6 +1,6 @@
 package com.SWP.WebServer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class JobType {
     private int jobTypeId;
     @Column(name = "job_type_name")
     private String jobTypeName;
-    @JsonIgnoreProperties("jobType")
+    @JsonIgnore
     @OneToMany(mappedBy = "jobTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Job> jobList;
 

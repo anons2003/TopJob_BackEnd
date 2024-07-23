@@ -26,7 +26,7 @@ public class Enterprise {
     //
     private String headquarter;
     private String founded;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String companyStory;
     private Date created_at;
     private Date updated_at;
@@ -46,14 +46,13 @@ public class Enterprise {
         this.enterprise_name = "";
         this.founder = "";
         this.founded = "";
-        this.companyStory="";
+        this.companyStory = "";
         this.avatar_url = "https://res.cloudinary.com/dz9kynjwb/image/upload/v1717770585/OIP_bsmlku.jpg";
         this.created_at = new Date();
         this.updated_at = new Date();
         this.employees = "";
         this.web_url = "";
         this.phone = "";
-        this.city = "";
         this.state = "";
     }
 

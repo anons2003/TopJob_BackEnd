@@ -53,13 +53,18 @@ JobSeeker {
 //    @ManyToMany(mappedBy = "jobSeekers")
 //    private List<Job> bookmarkedJobs;
 
-    //
 
     //New bookmark
-    @JsonIgnoreProperties("jobSeekers")
+    @JsonIgnore
     @OneToMany(mappedBy = "jobSeekers", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
     //
+
+    //Notification
+    @JsonIgnore
+    @OneToMany(mappedBy = "jobSeeker", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
 
     public JobSeeker(User user) {
         this.user = user;

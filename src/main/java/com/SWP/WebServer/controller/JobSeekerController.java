@@ -221,7 +221,7 @@ public class JobSeekerController {
 
 
     ) {
-        String message = emailService.sendMailFromJobSeeker(jid, name, email, subject, body);
+        String message = emailService.sendMailToJobSeeker(jid, name, email, subject, body);
 
         return ResponseEntity.ok(message);
     }

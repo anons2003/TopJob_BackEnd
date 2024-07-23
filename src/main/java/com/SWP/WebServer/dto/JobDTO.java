@@ -17,7 +17,9 @@ public class JobDTO {
     private String title;
     private String description;
     private String jobTypeName;
+    private Integer jobTypeId;
     private String jobCategoryName;
+    private Integer jobCategoryId;
     private String salaryType;
     private BigDecimal minSalary;
     private BigDecimal maxSalary;
@@ -28,9 +30,11 @@ public class JobDTO {
     private String address;
     private String country;
     private String state;
+    private String city;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String enterpriseName;
+    private Integer enterpriseId;
     private boolean isActive;
     private String avatarUrl;
     // Getters and setters

@@ -7,11 +7,13 @@ import com.SWP.WebServer.entity.Enterprise;
 import com.SWP.WebServer.entity.Job;
 import com.SWP.WebServer.exception.ApiRequestException;
 import com.SWP.WebServer.service.CloudinaryService;
+import com.SWP.WebServer.service.EmailService;
 import com.SWP.WebServer.service.Impl.CVService;
 import com.SWP.WebServer.service.Impl.EnterpriseService;
 import com.SWP.WebServer.service.JobPostService;
 import com.SWP.WebServer.token.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +39,8 @@ public class EnterpriseController {
     private JobPostService jobPostService;
     @Autowired
     private CVService cvService;
+    @Autowired
+    EmailService emailService;
 
     @Autowired
     public EnterpriseController(EnterpriseService enterpriseService) {
@@ -116,11 +120,19 @@ public class EnterpriseController {
 
     @PatchMapping("reject-cv/{uid}")// uid of jobSeeker
     public ResponseEntity<?> rejectCV(@RequestHeader("Authorization") String token,
-                                      @PathVariable("uid") int uid) {
+                                      @PathVariable("uid") int uid,
+                                      @RequestBody RejectionRequest rejectReason) {
         String enId = getUserIdFromToken(token);
         String message = cvService.rejectCV(enId, uid);
+        emailService.sendRejectionEmail(enId, uid, rejectReason.getReasons());
 
         return ResponseEntity.ok(message);
+    }
+
+    //Define to RejectionRequest class to accept json from the front end
+    @Data
+    public static class RejectionRequest {
+        private String[] reasons;
     }
 
     @PatchMapping("accept-cv/{uid}")// uid of jobSeeker
@@ -128,6 +140,8 @@ public class EnterpriseController {
                                       @PathVariable("uid") int uid) {
         String enId = getUserIdFromToken(token);
         String message = cvService.acceptCV(enId, uid);
+        emailService.sendAcceptanceEmail(enId, uid);
+
 
         return ResponseEntity.ok(message);
     }
@@ -144,11 +158,8 @@ public class EnterpriseController {
     @PatchMapping("/update-info")
     public ResponseEntity<?> updateUserInfo(
             @RequestBody UpdateInfoEnDTO updateInfoEnDTO,
-            @RequestParam(value = "resume", required = false) MultipartFile resume,
             @RequestHeader("Authorization") String token) throws IOException {
         String userId = getUserIdFromToken(token);
-
-
         Enterprise updatedUser = enterpriseService.updateInfoEn(updateInfoEnDTO, userId);
         return ResponseEntity.ok(updatedUser);
     }
@@ -179,6 +190,21 @@ public class EnterpriseController {
 
         return ResponseEntity.ok(message);
     }
+
+    @PostMapping("/send/{eid}")
+    public ResponseEntity<?> sendEmailToEnterprise(@PathVariable("eid") int eid,
+                                                   @RequestParam("name") String name,
+                                                   @RequestParam("email") String email,
+                                                   @RequestParam("subject") String subject,
+                                                   @RequestParam("body") String body
+
+
+    ) {
+        String message = emailService.sendEmailToEnterprise(eid, name, email, subject, body);
+
+        return ResponseEntity.ok(message);
+    }
+
 
 //    // Lưu một bài đăng công việc
 //    @PostMapping("/save")

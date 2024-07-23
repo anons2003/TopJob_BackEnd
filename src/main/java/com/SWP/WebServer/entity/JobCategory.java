@@ -1,6 +1,6 @@
 package com.SWP.WebServer.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class JobCategory {
     @Column(name = "job_category_name")
     private String jobCategoryName;
 
-    @JsonIgnoreProperties("jobCategoryEntity")
+    @JsonIgnore
     @OneToMany(mappedBy = "jobCategoryEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Job> jobList;
 }

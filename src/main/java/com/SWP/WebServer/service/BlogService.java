@@ -79,4 +79,7 @@ public class BlogService {
         return blog;
     }
 
+    public long countBlog() {
+        return  blogRepository.count();
+    }
 }

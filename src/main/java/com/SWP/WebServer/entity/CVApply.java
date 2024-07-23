@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
 @JsonIgnoreProperties({ "jobId"})
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,10 +32,10 @@ public class CVApply {
             cascade = CascadeType.PERSIST
     )
     @JoinColumn(
-            name = "userId",
-            referencedColumnName = "uid"
+            name = "jid",
+            referencedColumnName = "jid"
     )
-    private User user;
+    private JobSeeker jobSeeker;
 
     @ManyToOne(
             cascade = CascadeType.PERSIST
@@ -45,7 +48,7 @@ public class CVApply {
     private Enterprise enterprise;
 
     @ManyToOne(
-            cascade = CascadeType.ALL
+            cascade = CascadeType.PERSIST
     )
 
     @JoinColumn(
@@ -55,5 +58,7 @@ public class CVApply {
     @JsonIgnoreProperties({"cvApplies"})
     private Job jobId;
 
+    //New
+    private LocalDateTime deletionTime;
 
 }

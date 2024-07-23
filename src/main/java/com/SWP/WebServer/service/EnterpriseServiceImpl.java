@@ -71,15 +71,15 @@ public class EnterpriseServiceImpl implements EnterpriseService {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         // Update user fields
-        if (body.getCity() != null) user.setCity(body.getCity());
+        if (body.getEnterprise_name() != null) user.setEnterprise_name(body.getEnterprise_name());
+        if (body.getCity()!= null) user.setCity(body.getCity());
         if (body.getState() != null) user.setState(body.getState());
-        if (body.getEnterpriseName() != null) user.setEnterprise_name(body.getEnterpriseName());
         if (body.getPhone() != null) user.setPhone(body.getPhone());
         if (body.getCompanyStory() != null) user.setCompanyStory(body.getCompanyStory());
         if (body.getFounded() != null) user.setFounded(body.getFounded());
         if (body.getEmployees() != null) user.setEmployees(body.getEmployees());
         if (body.getFounder() != null) user.setFounder(body.getFounder());
-
+        if (body.getHeadquarter() != null) user.setHeadquarter(body.getHeadquarter());
 
         // Handle intro content and embedded videos
         if (body.getCompanyStory() != null) {

@@ -1,5 +1,6 @@
 package com.SWP.WebServer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,9 +49,9 @@ public class Job {
     private String address;
     private String country;
     private String state;
-
+    private String city;
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -58,13 +59,17 @@ public class Job {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "posted_eid", referencedColumnName = "eid")
     private Enterprise enterprise;
 
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdDate = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
@@ -73,13 +78,16 @@ public class Job {
         updatedAt = LocalDateTime.now();
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "job_type", referencedColumnName = "job_type_id")
+//    @JsonIgnoreProperties("jobList")
     @JsonIgnoreProperties("jobList")
     private JobType jobTypeEntity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "job_category", referencedColumnName = "job_category_id") // Đảm bảo khớp với thuộc tính trong JobCategory
+    @ManyToOne
+    @JoinColumn(name = "job_category", referencedColumnName = "job_category_id")
+    // Đảm bảo khớp với thuộc tính trong JobCategory
+//    @JsonIgnoreProperties("jobList")
     @JsonIgnoreProperties("jobList")
     private JobCategory jobCategoryEntity;
 
@@ -87,9 +95,10 @@ public class Job {
     @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
 
-    @JsonIgnoreProperties({"jobId","user","enterprise"})
-    @OneToMany(mappedBy = "jobId",fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    //    @JsonIgnoreProperties({"jobId","user","enterprise"})
+//    @OneToMany(mappedBy = "jobId",fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<CVApply> cvApplies;
+    @JsonIgnore
+    @OneToMany(mappedBy = "jobId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CVApply> cvApplies;
-
-
 }
